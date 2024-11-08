@@ -1,0 +1,148 @@
+{
+    "_version": "1.17.0",
+    "sap.app": {
+        "id": "lu.uni.zpositionrequest",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "0.0.1"
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "resources": "resources.json",
+        "sourceTemplate": {
+            "id": "@sap/generator-fiori:basic",
+            "version": "1.15.0",
+            "toolsId": "730c99d7-68ff-456d-8a14-7834557a7216"
+        },
+        "dataSources": {
+            "Z_HR_POSITION_REQUEST_SRV": {
+                "uri": "/sap/opu/odata/sap/Z_HR_POSITION_REQUEST_SRV",
+                "type": "OData",
+                "settings": {
+                    "annotations": [],
+                    "localUri": "localService/metadata.xml",
+                    "odataVersion": "2.0"
+                }
+            }
+        }
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+    "sap.ui5": {
+        "flexEnabled": false,
+        "dependencies": {
+            "minUI5Version": "1.71.59",
+            "libs": {
+                "sap.m": {},
+                "sap.ui.core": {}
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "lu.uni.zpositionrequest.i18n.i18n"
+                }
+            },
+            "": {
+                "preload": true,
+                "dataSource": "Z_HR_POSITION_REQUEST_SRV",
+                "settings": {
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "Inline",
+                    "refreshAfterChange": false,
+                    "metadataUrlParams": {
+                        "sap-value-list": "none"
+                    }
+                }
+            }
+        },
+        "resources": {
+            "css": [
+                {
+                    "uri": "css/style.css"
+                }
+            ]
+        },
+        "routing": {
+            "config": {
+                "routerClass": "sap.f.routing.Router",
+                "viewType": "XML",
+                "async": true,
+                "viewPath": "lu.uni.zpositionrequest.view",
+                "controlAggregation": "pages",
+                "controlId": "idAppControl",
+                "bypassed": {
+                    "target": [
+                        "notFound"
+                    ]
+                },
+                "clearControlAggregation": false
+            },
+            "routes": [
+                {
+                    "name": "RouteMaster",
+                    "pattern": "",
+                    "target": [
+                        "TargetMaster"
+                    ],
+                    "layout": "OneColumn"
+                },
+                {
+                    "name": "RouteDetail",
+                    "pattern": "Requests/{positionRequestId}",
+                    "target": [
+                        "TargetMaster",
+                        "TargetDetail"
+                    ],
+                    "layout": "TwoColumnsMidExpanded"
+                }
+            ],
+            "targets": {
+                "TargetMaster": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "dashboard",
+                    "viewName": "Dashboard",
+                    "viewLevel": 1,
+                    "controlAggregation": "beginColumnPages"
+                },
+                "TargetDetail": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "Detail",
+                    "viewName": "Detail",
+                    "viewLevel": 2,
+                    "controlAggregation": "midColumnPages"
+                }
+            }
+        },
+        "rootView": {
+            "viewName": "lu.uni.zpositionrequest.view.App",
+            "type": "XML",
+            "async": true,
+            "id": "App"
+        }
+    }
+}

@@ -1,0 +1,13 @@
+<mvc:View
+    controllerName="lu.uni.zpositionrequest.controller.Detail"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+>
+    <Page
+        id="detail"
+        title="{i18n>title}"
+    >
+        <content />
+    </Page>
+</mvc:View>
