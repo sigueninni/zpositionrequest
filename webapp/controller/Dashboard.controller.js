@@ -99,7 +99,7 @@ sap.ui.define([
                         if (mParams.list.getMode() === "None") {
                             return;
                         }
-                        debugger;
+
                         let sObjectId = mParams.firstListitem.getBindingContext().getProperty("Guid");
                         console.log({ sObjectId });
                         this.getRouter().navTo("RouteDetail", {

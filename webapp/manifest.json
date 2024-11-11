@@ -24,6 +24,10 @@
                     "localUri": "localService/metadata.xml",
                     "odataVersion": "2.0"
                 }
+            },
+            "commentData_alias": {
+                "uri": "model/localData/comments.json",
+                "type": "JSON"
             }
         }
     },
@@ -77,6 +81,10 @@
                         "sap-value-list": "none"
                     }
                 }
+            },
+            "commentData": {
+                "type": "sap.ui.model.json.JSONModel",
+                "dataSource": "commentData_alias"
             }
         },
         "resources": {

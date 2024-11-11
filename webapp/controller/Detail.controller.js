@@ -4,9 +4,11 @@ sap.ui.define([
     "lu/uni/zpositionrequest//model/formatter",
     "sap/base/strings/formatMessage",
     "sap/ui/core/ValueState",
+    "sap/viz/ui5/data/FlattenedDataset",
+    "sap/viz/ui5/controls/common/feeds/FeedItem"
 
 ],
-    function (BaseController, JSONModel, formatter, formatMessage, ValueState) {
+    function (BaseController, JSONModel, formatter, formatMessage, ValueState, FlattenedDataset, FeedItem) {
         "use strict";
 
         return BaseController.extend("lu.uni.zpositionrequest.controller.Detail", {
@@ -53,6 +55,72 @@ sap.ui.define([
 
                 this.getOwnerComponent().getModel().metadataLoaded().then(this._onMetadataLoaded.bind(this));
 
+
+                //TO_REPLACE wth real TimeLine data
+                /*this below code for get the JSON Model form Manifest.json file*/
+                debugger;
+                const commentsDataModel = this.getOwnerComponent().getModel("commentData");
+                console.log({ commentsDataModel });
+                this.getView().setModel(commentsDataModel, "commentsModel");
+
+
+
+                var data = [{
+                    "Year": "2024",
+                    "Cost": 10000
+                }, {
+                    "Year": "2025",
+                    "Cost": 20000
+                }, {
+                    "Year": "2026",
+                    "Cost": 20000
+                }, {
+                    "Year": "2027",
+                    "Cost": 40000
+                }, {
+                    "Year": "2028",
+                    "Cost": 20000
+                }];
+                // Load local JSON data
+                const oDataModel = new sap.ui.model.json.JSONModel(data);
+                // Use this line in case you are loading from external OData url
+                // oDataModel.loadData(data);
+                // Get the VizFrame control
+                const oChartContainer = this.getView().byId("chartContainer");
+                // Set the data model to the VizFrame
+                oChartContainer.setModel(oDataModel);
+                // Create a FlattenedDataset
+                let oDataset = new FlattenedDataset({
+                    dimensions: [{
+                        name: "Year",
+                        value: "{Year}"
+                    }],
+                    measures: [{
+                        name: "Cost",
+                        value: "{Cost}"
+                    }],
+                    data: {
+                        path: "/"
+                    }
+                });
+                // Add the dataset to the VizFrame
+                oChartContainer.setDataset(oDataset);
+                // Create a FeedItem for Category dimension
+                let oCategoryFeed = new FeedItem({
+                    uid: "categoryAxis",
+                    type: "Dimension",
+                    values: ["Year"]
+                });
+                // Create a FeedItem for Revenue measure
+                let oRevenueFeed = new FeedItem({
+                    uid: "valueAxis",
+                    type: "Measure",
+                    values: ["Cost"]
+                });
+                // Add the FeedItems to the VizFrame
+                oChartContainer.addFeed(oCategoryFeed);
+                oChartContainer.addFeed(oRevenueFeed);
+
             },
 
 
@@ -69,7 +137,6 @@ sap.ui.define([
             _onObjectMatched: function (oEvent) {
                 var oView = this.getView();
                 var oModel = oView.getModel();
-                debugger;
                 var sObjectId = oEvent.getParameter("arguments").positionRequestId;
 
                 this.getModel().metadataLoaded().then(function () {
@@ -94,7 +161,7 @@ sap.ui.define([
                                         oMinDate.setMonth(oMinDate.getMonth() + 1);
                                         oMinDate.setDate(oMinDate.getDate() - 2);
                                         oView.byId("endDate").setMinDate(oMinDate); */
-                    debugger;
+
                     const sObjectPath = this.getModel().createKey("PositionRequestSet", {
                         Guid: sObjectId
                     });
