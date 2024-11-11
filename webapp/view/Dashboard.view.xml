@@ -82,7 +82,8 @@
                             <ObjectAttribute
                                 text="{path: 'CreatedOn', type: 'sap.ui.model.type.Date', formatOptions: { style: 'medium', strictParsing: true, relative: false, pattern: 'dd/MM/yyyy' }}"
                             />
-                            <ObjectAttribute text="{Owner/Name}" />
+                            <ObjectAttribute text="{Guid}" />
+                            <ObjectAttribute text="{Requid}" />
                             <!--                <ObjectAttribute
                                 text="{path: 'ContractType', formatter: '.formatter.contractTypeText'} {i18n>dot} {path: 'InternshipType', formatter: '.formatter.internshipTypeText'}"
                             />

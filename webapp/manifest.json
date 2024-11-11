@@ -48,8 +48,11 @@
         "dependencies": {
             "minUI5Version": "1.71.59",
             "libs": {
+                "sap.f": {},
                 "sap.m": {},
-                "sap.ui.core": {}
+                "sap.ui.core": {},
+                "sap.ui.layout": {},
+                "sap.uxap": {}
             }
         },
         "contentDensities": {
@@ -95,8 +98,7 @@
                     "target": [
                         "notFound"
                     ]
-                },
-                "clearControlAggregation": false
+                }
             },
             "routes": [
                 {
@@ -131,8 +133,26 @@
                     "viewType": "XML",
                     "transition": "slide",
                     "clearControlAggregation": false,
-                    "viewId": "Detail",
+                    "viewId": "detail",
                     "viewName": "Detail",
+                    "viewLevel": 2,
+                    "controlAggregation": "midColumnPages"
+                },
+                "detailNoObjectsAvailable": {
+                    "viewName": "DetailNoObjectsAvailable",
+                    "viewId": "detailNoObjectsAvailable",
+                    "viewLevel": 2,
+                    "controlAggregation": "midColumnPages"
+                },
+                "notFound": {
+                    "viewName": "NotFound",
+                    "viewId": "notFound",
+                    "viewLevel": 1,
+                    "controlAggregation": "beginColumnPages"
+                },
+                "detailObjectNotFound": {
+                    "viewName": "DetailObjectNotFound",
+                    "viewId": "detailObjectNotFound",
                     "viewLevel": 2,
                     "controlAggregation": "midColumnPages"
                 }

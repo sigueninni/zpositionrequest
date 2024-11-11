@@ -5,9 +5,10 @@
 sap.ui.define([
     "sap/ui/core/UIComponent",
     "sap/ui/Device",
-    "lu/uni/zpositionrequest/model/models"
+    "lu/uni/zpositionrequest/model/models",
+    "lu/uni/zpositionrequest/controller/ListSelector"
 ],
-    function (UIComponent, Device, models) {
+    function (UIComponent, Device, models, ListSelector) {
         "use strict";
 
         return UIComponent.extend("lu.uni.zpositionrequest.Component", {
@@ -21,14 +22,18 @@ sap.ui.define([
              * @override
              */
             init: function () {
+                this.oListSelector = new ListSelector();
+
+                // set the device model
+                this.setModel(models.createDeviceModel(), "device");
+                // set the FLP model
+                this.setModel(models.createFLPModel(), "FLP");
+
                 // call the base component's init function
                 UIComponent.prototype.init.apply(this, arguments);
 
                 // enable routing
                 this.getRouter().initialize();
-
-                // set the device model
-                this.setModel(models.createDeviceModel(), "device");
             },
 
             /**

@@ -42,6 +42,19 @@ sap.ui.define([
 
             },
 
+
+            /* =========================================================== */
+            /* event handlers                                              */
+            /* =========================================================== */
+            /**
+             * Event handler for the bypassed event, which is fired when no routing pattern matched.
+             * If there was an object selected in the master list, that selection is removed.
+             * @public
+             */
+            onBypassed: function () {
+                this._oList.removeSelections(true);
+            },
+
             /* =========================================================== */
             /*  internal methods                                     */
             /* =========================================================== */
@@ -57,6 +70,55 @@ sap.ui.define([
                     groupBy: "None"
                 });
             },
+
+
+            /**
+             * If the master route was hit (empty hash) we have to set
+             * the hash to to the first item in the list as soon as the
+             * listLoading is done and the first item in the list is known
+             * @private
+             */
+            _onMasterMatched: function () {
+
+
+                // if (this.getOwnerComponent().getComponentData() && this.getOwnerComponent().getComponentData().startupParameters) {
+
+                //     //TODO check why not working in FLP mode and why undefined in noFlp
+                //     const startupParams = this.getOwnerComponent().getComponentData().startupParameters; // get Startup params from Owner Component
+                //     if ((startupParams.objectId && startupParams.objectId[0])) {
+
+                //         // this._oList.removeAllItems();
+                //         this.getRouter().navTo("object", {
+                //             objectId: startupParams.objectId[0]  // read Supplier ID. Every parameter is placed in an array therefore [0] holds the value
+                //         }, true);
+                //     } else {
+                this.getOwnerComponent().oListSelector.oWhenListLoadingIsDone.then(
+
+                    function (mParams) {
+                        console.log('done');
+                        if (mParams.list.getMode() === "None") {
+                            return;
+                        }
+                        debugger;
+                        let sObjectId = mParams.firstListitem.getBindingContext().getProperty("Guid");
+                        console.log({ sObjectId });
+                        this.getRouter().navTo("RouteDetail", {
+                            positionRequestId: sObjectId
+                        }, true);
+                    }.bind(this),
+                    function (mParams) {
+                        if (mParams.error) {
+                            console.log(mParams.error)
+                            return;
+                        }
+                        this.getRouter().getTargets().display("detailNoObjectsAvailable");
+                    }.bind(this)
+                );
+                //     }
+                // }
+            },
+
+
 
         });
     });

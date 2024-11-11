@@ -1,13 +1,99 @@
 <mvc:View
     controllerName="lu.uni.zpositionrequest.controller.Detail"
     xmlns:mvc="sap.ui.core.mvc"
-    displayBlock="true"
     xmlns="sap.m"
+    xmlns:uxap="sap.uxap"
+    xmlns:l="sap.ui.layout"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    busy="{detailView>/busy}"
+    busyIndicatorDelay="{detailView>/delay}"
+    displayBlock="true"
 >
-    <Page
-        id="detail"
-        title="{i18n>title}"
+    <uxap:ObjectPageLayout
+        showTitleInHeaderContent="true"
+        showHeaderContent="true"
+        showAnchorBar="true"
+        showFooter="true"
+        subSectionLayout="TitleOnTop"
     >
-        <content />
-    </Page>
+        <uxap:headerTitle>
+            <uxap:ObjectPageHeader
+                objectTitle="{Title}"
+                objectSubtitle="{Title}"
+                objectImageShape="Square"
+                isObjectIconAlwaysVisible="false"
+                isObjectTitleAlwaysVisible="false"
+                isObjectSubtitleAlwaysVisible="false"
+                isActionAreaAlwaysVisible="true"
+            >
+                <uxap:actions>
+                    <Text text="{Title}" />
+                    <Button
+                        text="{i18n>complete}"
+                        type="Default"
+                        visible="{RequestSettings/IsEditEnabled}"
+                        press="onCompleteButtonPress"
+                    />
+                    <Button
+                        text="{i18n>edit}"
+                        type="Emphasized"
+                        visible="{RequestSettings/IsEditEnabled}"
+                        press="onEditButtonPress"
+                    />
+                    <Button
+                        text="{i18n>submit}"
+                        type="Emphasized"
+                        visible="{RequestSettings/IsSubmitEnabled}"
+                        press="onSubmitButtonPress"
+                    />
+                    <Button
+                        text="{i18n>delete}"
+                        type="Default"
+                        visible="{RequestSettings/IsDeleteEnabled}"
+                        press="onDeleteButtonPress"
+                    />
+                    <Button
+                        icon="sap-icon://workflow-tasks"
+                        tooltip="{i18n>sendToHRControlling}"
+                        type="Emphasized"
+                        enabled="{RequestSettings/IsTransferEnabled}"
+                        visible="{RequestSettings/IsStudentOffice}"
+                        press="onSendToHRControllingButtonPress"
+                    />
+                    <Button
+                        icon="sap-icon://workflow-tasks"
+                        tooltip="{i18n>sendToHRStudentOffice}"
+                        type="Emphasized"
+                        enabled="{RequestSettings/IsTransferEnabled}"
+                        visible="{RequestSettings/IsHRControlling}"
+                        press="onSendToHRStudentOfficeButtonPress"
+                    />
+                    <Button
+                        icon="sap-icon://generate-shortcut"
+                        tooltip="{i18n>generateConventionTooltip}"
+                        type="Emphasized"
+                        enabled="{RequestSettings/IsGenerateConventionEnabled}"
+                        visible="{RequestSettings/IsStudentOffice}"
+                        press="onGenerateConventionDocumentButtonPress"
+                    />
+                    <Button
+                        icon="sap-icon://paper-plane"
+                        tooltip="{i18n>notifyRequestor}"
+                        type="Emphasized"
+                        enabled="{RequestSettings/IsEditEnabled}"
+                        visible="{RequestSettings/IsStudentOffice}"
+                        press="onNotifyRequestorButtonPress"
+                    />
+                    <Button
+                        text="{i18n>extend}"
+                        type="Emphasized"
+                        visible="{RequestSettings/IsInternshipExtensionEnabled}"
+                        press="onExtendButtonPress"
+                    />
+                </uxap:actions>
+            </uxap:ObjectPageHeader>
+        </uxap:headerTitle>
+        <uxap:headerContent />
+    </uxap:ObjectPageLayout>
 </mvc:View>
