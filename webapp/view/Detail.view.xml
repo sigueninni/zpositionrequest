@@ -20,7 +20,7 @@
         <uxap:headerTitle>
             <uxap:ObjectPageHeader
                 objectTitle="{Title}"
-                objectSubtitle="{Title}"
+                objectSubtitle="{ path: 'ReqFlow', formatter: '.formatter.flowText' } - { path: 'ReqType', formatter: '.formatter.typeText' }"
                 objectImageShape="Square"
                 isObjectIconAlwaysVisible="false"
                 isObjectTitleAlwaysVisible="false"
@@ -28,8 +28,7 @@
                 isActionAreaAlwaysVisible="true"
             >
                 <uxap:actions>
-                    <Text text="{Title}" />
-                    <Button
+                    <!--                     <Button
                         text="{i18n>complete}"
                         type="Default"
                         visible="{RequestSettings/IsEditEnabled}"
@@ -40,7 +39,7 @@
                         type="Emphasized"
                         visible="{RequestSettings/IsEditEnabled}"
                         press="onEditButtonPress"
-                    />
+                    /> -->
                     <Button
                         text="{i18n>submit}"
                         type="Emphasized"
@@ -54,6 +53,11 @@
                         press="onDeleteButtonPress"
                     />
                     <Button
+                        icon="sap-icon://expense-report"
+                        tooltip="{i18n>costSimulation}"
+                        type="Emphasized"
+                    />
+                    <!--                     <Button
                         icon="sap-icon://workflow-tasks"
                         tooltip="{i18n>sendToHRControlling}"
                         type="Emphasized"
@@ -90,10 +94,139 @@
                         type="Emphasized"
                         visible="{RequestSettings/IsInternshipExtensionEnabled}"
                         press="onExtendButtonPress"
-                    />
+                    /> -->
                 </uxap:actions>
             </uxap:ObjectPageHeader>
         </uxap:headerTitle>
-        <uxap:headerContent />
+        <uxap:headerContent>
+            <l:VerticalLayout>
+                <ObjectAttribute
+                    title="{i18n>createdOn}"
+                    text="{path: 'CreatedOn', type: 'sap.ui.model.type.Date', formatOptions: { style: 'medium', strictParsing: true, relative: false, pattern: 'dd/MM/yyyy', UTC: true }}"
+                />
+                <ObjectAttribute
+                    title="{i18n>createdBy}"
+                    text="{CreatedBy}"
+                />
+            </l:VerticalLayout>
+            <l:VerticalLayout>
+                <ObjectStatus
+                    title="{i18n>status}"
+                    text="{ path: 'Status', formatter: '.formatter.statusText'}"
+                    id="status"
+                    state="{ path: 'Status', formatter: '.formatter.statusStateText'}"
+                />
+            </l:VerticalLayout>
+
+            <l:VerticalLayout>
+                <Label text="" />
+            </l:VerticalLayout>
+
+            <l:VerticalLayout>
+                <VBox height="63px">
+                    <Label text="Completeness" />
+                    <ProgressIndicator
+                        percentValue="30"
+                        displayValue="30%"
+                        showValue="true"
+                        state="None"
+                    />
+                </VBox>
+            </l:VerticalLayout>
+
+            <!--      <ObjectStatus
+                    title="{i18n>step}"
+                    text="{ path: 'SubStatus', formatter: '.formatter.subStatusText'}"
+                    id="subStatus"
+                    visible="{ path: 'SubStatus', formatter: '.formatter.subStatusVisibility' }"
+                /> -->
+        </uxap:headerContent>
+        <!-- Section and forms -->
+        <uxap:sections>
+            <uxap:ObjectPageSection
+                id="positionRequestFormSection"
+                showTitle="true"
+                title="{i18n>requestForm}"
+                titleUppercase="true"
+                visible="true"
+            >
+                <uxap:subSections>
+                    <!-- Type & Dates -->
+                    <uxap:ObjectPageSubSection
+                        id="typeDateSubSection"
+                        title="{i18n>requestTypeDates}"
+                    >
+                        <uxap:blocks>
+                            <Label text="test" />
+                            <!--                    <form:SimpleForm
+                                layout="ResponsiveGridLayout"
+                                labelSpanXL="4"
+                                labelSpanL="4"
+                                labelSpanM="12"
+                                labelSpanS="12"
+                                adjustLabelSpan="false"
+                                emptySpanXL="0"
+                                emptySpanL="0"
+                                emptySpanM="0"
+                                emptySpanS="0"
+                                columnsXL="2"
+                                columnsL="2"
+                                columnsM="2"
+                            >
+                                <form:content>
+                                    <core:Title
+                                        text="{i18n>RequestTypeDates}"
+                                    />
+                                </form:content>
+                            </form:SimpleForm> -->
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+
+                    <!-- Identification Form -->
+                    <uxap:ObjectPageSubSection
+                        id="identificationSubSection"
+                        title="{i18n>identification}"
+                    >
+                        <uxap:blocks>
+                            <Label text="test" />
+                            <!--                     <form:SimpleForm
+                                layout="ResponsiveGridLayout"
+                                labelSpanXL="4"
+                                labelSpanL="4"
+                                labelSpanM="4"
+                                labelSpanS="4"
+                                adjustLabelSpan="true"
+                                emptySpanXL="0"
+                                emptySpanL="0"
+                                emptySpanM="0"
+                                emptySpanS="0"
+                                columnsXL="1"
+                                columnsL="1"
+                                columnsM="1"
+                            >
+                                <form:content>
+                                    <core:Title
+                                        text="{i18n>RequestTypeDates}"
+                                    />
+                                </form:content>
+                            </form:SimpleForm> -->
+                        </uxap:blocks>
+                        <uxap:moreBlocks />
+                        <uxap:actions />
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+
+            <uxap:ObjectPageSection
+                id="goals"
+                title="2014 Goals Plan"
+            >
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection id="goalsSS1">
+                        <Label text="test3" />
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+        </uxap:sections>
     </uxap:ObjectPageLayout>
 </mvc:View>

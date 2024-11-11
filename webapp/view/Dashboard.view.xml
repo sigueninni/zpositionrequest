@@ -82,6 +82,9 @@
                             <ObjectAttribute
                                 text="{path: 'CreatedOn', type: 'sap.ui.model.type.Date', formatOptions: { style: 'medium', strictParsing: true, relative: false, pattern: 'dd/MM/yyyy' }}"
                             />
+                            <ObjectAttribute
+                                text="{ path: 'ReqFlow', formatter: '.formatter.flowText' } - { path: 'ReqType', formatter: '.formatter.typeText' }"
+                            />
                             <ObjectAttribute text="{Guid}" />
                             <ObjectAttribute text="{Requid}" />
                             <!--                <ObjectAttribute
