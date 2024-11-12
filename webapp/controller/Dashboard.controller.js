@@ -1,9 +1,10 @@
 sap.ui.define([
     "lu/uni/zpositionrequest/controller/BaseController",
     "sap/ui/model/json/JSONModel",
-    "lu/uni/zpositionrequest/model/formatter"
+    "lu/uni/zpositionrequest/model/formatter",
+    "sap/ui/Device",
 ],
-    function (BaseController, JSONModel, formatter) {
+    function (BaseController, JSONModel, formatter, Device) {
         "use strict";
 
         return BaseController.extend("lu.uni.zpositionrequest.controller.Dashboard", {
@@ -54,6 +55,15 @@ sap.ui.define([
             onBypassed: function () {
                 this._oList.removeSelections(true);
             },
+            /**
+             * Event handler for the list selection event
+             * @param {sap.ui.base.Event} oEvent the list selectionChange event
+             * @public
+             */
+            onSelectionChange: function (oEvent) {
+                // get the list item, either from the listItem parameter or from the event's source itself (will depend on the device-dependent mode).
+                this._showDetail(oEvent.getParameter("listItem") || oEvent.getSource());
+            },
 
             /* =========================================================== */
             /*  internal methods                                     */
@@ -71,6 +81,20 @@ sap.ui.define([
                 });
             },
 
+            /**
+             * Shows the selected item on the detail page
+             * On phones a additional history entry is created
+             * @param {sap.m.ObjectListItem} oItem selected Item
+             * @private
+             */
+            _showDetail: function (oItem) {
+                var bReplace = !Device.system.phone;
+                this.getRouter().navTo("RouteDetail", {
+                    positionRequestId: oItem.getBindingContext().getProperty("Guid")
+                }, bReplace);
+
+
+            },
 
             /**
              * If the master route was hit (empty hash) we have to set

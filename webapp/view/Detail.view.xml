@@ -183,24 +183,39 @@
                                 columnsM="2"
                             >
                                 <form:content>
-                                    <core:Title text="{i18n>requestType}" />
+                                    <core:Title text="{i18n>requestFlowType}" />
                                     <Label
-                                        text="{i18n>positionRequestType}"
+                                        text="{i18n>flowType}"
                                         required="true"
                                     />
                                     <Select
-                                        id="positionRequestType"
+                                        id="positionRequestFlow"
                                         forceSelection="true"
-                                        items="{/InternshipTypeSet}"
-                                        selectedKey="{ path: 'InternshipType', type: 'sap.ui.model.type.Integer'}"
+                                        items="{/FlowReqSet}"
+                                        selectedKey="{ path: 'flowType', type: 'sap.ui.model.type.Integer'}"
                                         enabled="{RequestSettings/IsFormEditable}"
-                                        change="updateAmounts"
+                                        change=""
                                     >
                                         <core:Item
                                             text="{Description}"
                                             key="{Type}"
                                         />
                                     </Select>
+                                    <Label text="{i18n>requestType}" />
+                                    <Select
+                                        id="positionRequestType"
+                                        forceSelection="true"
+                                        items="{/TypeReqSet}"
+                                        selectedKey="{ path: 'requestType', type: 'sap.ui.model.type.Integer'}"
+                                        enabled="{RequestSettings/IsFormEditable}"
+                                        change=""
+                                    >
+                                        <core:Item
+                                            text="{Description}"
+                                            key="{Type}"
+                                        />
+                                    </Select>
+
                                     <core:Title text="{i18n>Dates}" />
                                     <Label text="{i18n>startDate}" />
                                     <DatePicker
