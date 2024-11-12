@@ -217,6 +217,21 @@
                                     </Select>
 
                                     <core:Title text="{i18n>Dates}" />
+                                    <Label text="{i18n>contractType}" />
+                                    <Select
+                                        id="contractType"
+                                        forceSelection="true"
+                                        change=""
+                                    >
+                                        <core:Item
+                                            text="CDI"
+                                            key="cdi"
+                                        />
+                                        <core:Item
+                                            text="CDD"
+                                            key="cdd"
+                                        />
+                                    </Select>
                                     <Label text="{i18n>startDate}" />
                                     <DatePicker
                                         id="startDate"
@@ -388,7 +403,27 @@
             >
                 <uxap:subSections>
                     <uxap:ObjectPageSubSection id="commentSubSection">
-                        <Label text="test3" />
+                        <VBox>
+                            <FeedInput
+                                post="onFeedInputPosted"
+                                showIcon="false"
+                                visible="{RequestSettings/IsCommentsEnabled}"
+                            />
+                            <List
+                                showSeparators="Inner"
+                                items="{ path: 'Comments', sorter: { path: 'CreatedOn' } }"
+                                mode="Delete"
+                                delete="onDeleteFeedItemBtnPressed"
+                            >
+                                <FeedListItem
+                                    sender="{CreatorName}"
+                                    showIcon="false"
+                                    senderActive="false"
+                                    timestamp="{ path: 'CreatedOn', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'dd MMM yyyy', UTC: true } } { path: 'CreatedAt', formatter: '.formatter.formatTime'}"
+                                    text="{Note}"
+                                />
+                            </List>
+                        </VBox>
                     </uxap:ObjectPageSubSection>
                 </uxap:subSections>
             </uxap:ObjectPageSection>
