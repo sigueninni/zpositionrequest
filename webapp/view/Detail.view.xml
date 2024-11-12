@@ -60,6 +60,13 @@
                         tooltip="{i18n>costSimulation}"
                         type="Emphasized"
                     />
+                    <Button
+                        icon="sap-icon://expense-report"
+                        text="{i18n>triggerRecruitment}"
+                        tooltip="{i18n>triggerRecruitment}"
+                        enabled="false"
+                        type="Default"
+                    />
                     <!--                     <Button
                         icon="sap-icon://workflow-tasks"
                         tooltip="{i18n>sendToHRControlling}"
@@ -182,7 +189,7 @@
                                         required="true"
                                     />
                                     <Select
-                                        id="internshipType"
+                                        id="positionRequestType"
                                         forceSelection="true"
                                         items="{/InternshipTypeSet}"
                                         selectedKey="{ path: 'InternshipType', type: 'sap.ui.model.type.Integer'}"
@@ -217,34 +224,141 @@
                         </uxap:blocks>
                     </uxap:ObjectPageSubSection>
 
-                    <!-- Identification Form -->
+                    <!-- Assignment Form -->
                     <uxap:ObjectPageSubSection
-                        id="identificationSubSection"
+                        id="assignmentSubSection"
                         title="{i18n>assignment}"
                     >
                         <uxap:blocks>
-                            <Label text="test" />
-                            <!--                     <form:SimpleForm
+                            <form:SimpleForm
                                 layout="ResponsiveGridLayout"
                                 labelSpanXL="4"
                                 labelSpanL="4"
-                                labelSpanM="4"
-                                labelSpanS="4"
-                                adjustLabelSpan="true"
+                                labelSpanM="12"
+                                labelSpanS="12"
+                                adjustLabelSpan="false"
                                 emptySpanXL="0"
                                 emptySpanL="0"
                                 emptySpanM="0"
                                 emptySpanS="0"
-                                columnsXL="1"
-                                columnsL="1"
-                                columnsM="1"
+                                columnsXL="2"
+                                columnsL="2"
+                                columnsM="2"
+                                singleContainerFullSize="false"
                             >
                                 <form:content>
-                                    <core:Title
-                                        text="{i18n>RequestTypeDates}"
+                                    <core:Title text="{i18n>position}" />
+                                    <Label text="{i18n>fundingOrgUnit}" />
+                                    <Input
+                                        id="fundingOrgUnit"
+                                        type="Text"
+                                        value="{Assignment/OrgUnitName}"
+                                        showValueHelp="true"
+                                        valueHelpOnly="true"
+                                        valueHelpRequest="onOrgUnitValueHelpPress"
+                                        editable="{RequestSettings/IsFormEditable}"
+                                        required="true"
+                                    />
+                                    <Label text="{i18n>positionId}" />
+                                    <Input
+                                        id="positionId"
+                                        type="Number"
+                                        value="{ path: 'Assignment/PositionId' }"
+                                        visible="{RequestSettings/IsAdminDataVisible}"
+                                        editable="{RequestSettings/IsPositionDataEditable}"
+                                        maxLength="8"
+                                        description="{Assignment/PositionName}"
+                                        showValueHelp="true"
+                                        valueHelpOnly="true"
+                                        valueHelpRequest="onPositionValueHelpPress"
+                                    />
+                                    <Label text="{i18n>personnelArea}" />
+                                    <Select
+                                        id="personnelArea"
+                                        forceSelection="false"
+                                        items="{/PersonnelAreaSet}"
+                                        selectedKey="{Assignment/PersonnelArea}"
+                                        enabled="{RequestSettings/IsFormEditable}"
+                                        change="onSelectPersArea"
+                                    >
+                                        <core:Item
+                                            text="{PersonnelAreaName}"
+                                            key="{PersonnelAreaKey}"
+                                        />
+                                    </Select>
+                                    <!--<Label text="{i18n>personnelSubarea}"/>-->
+                                    <!--<Select id="personnelSubarea" forceSelection="false" items="{/PersonnelSubareaSet}" selectedKey="{Assignment/PersonnelSubarea}"-->
+                                    <!--	enabled="{RequestSettings/IsFormEditable}">-->
+                                    <!--	<core:Item id="personnelSubareaItem" text="{PersonnelSubareaName}" key="{PersonnelSubareaKey}"/>-->
+                                    <!--</Select>-->
+                                    <Label
+                                        text=""
+                                        visible="false"
+                                    />
+                                    <Input
+                                        id="fundingOrgUnitId"
+                                        type="Text"
+                                        value="{Assignment/OrgUnitId}"
+                                        visible="false"
+                                    />
+                                    <Input
+                                        id="supervisorUserName"
+                                        value="{SupervisorUserName}"
+                                        visible="false"
+                                    />
+                                    <Input
+                                        id="otherSupervisorUserName"
+                                        value="{OtherSupervisorUserName}"
+                                        visible="false"
+                                    />
+                                    <Input
+                                        id="financialControllerUserName"
+                                        value="{FinancialControllerUserName}"
+                                        visible="false"
+                                    />
+                                    <Input
+                                        id="contactPersonUserName"
+                                        value="{ContactPersonUserName}"
+                                        visible="false"
+                                    />
+                                    <core:Title text="{i18n>stakeholders}" />
+                                    <Label text="{i18n>supervisor}" />
+                                    <Input
+                                        id="supervisor"
+                                        type="Text"
+                                        value="{Supervisor/Name}"
+                                        showValueHelp="true"
+                                        valueHelpOnly="true"
+                                        valueHelpRequest="onSupervisorValueHelpPress"
+                                        editable="{RequestSettings/IsFormEditable}"
+                                        required="true"
+                                    />
+                                    <Label text="{i18n>otherSupervisor}" />
+                                    <Input
+                                        id="otherSupervisor"
+                                        type="Text"
+                                        value="{OtherSupervisor/Name}"
+                                        showValueHelp="true"
+                                        valueHelpOnly="true"
+                                        valueHelpRequest="onOtherSupervisorValueHelpPress"
+                                        editable="{RequestSettings/IsFormEditable}"
+                                    />
+                                    <!--<Label text="{i18n>financialController}"/>-->
+                                    <!--<Input id="financialController" type="Text" value="{FinancialController/Name}" showValueHelp="true" valueHelpOnly="true"-->
+                                    <!--	valueHelpRequest="onFinancialControllerValueHelpPress" editable="{RequestSettings/IsFormEditable}" required="true"/>-->
+                                    <Label text="{i18n>contactPerson}" />
+                                    <Input
+                                        id="contactPerson"
+                                        type="Text"
+                                        value="{ContactPerson/Name}"
+                                        showValueHelp="true"
+                                        valueHelpOnly="true"
+                                        valueHelpRequest="onContactPersonValueHelpPress"
+                                        editable="{RequestSettings/IsFormEditable}"
+                                        required="true"
                                     />
                                 </form:content>
-                            </form:SimpleForm> -->
+                            </form:SimpleForm>
                         </uxap:blocks>
                         <uxap:moreBlocks />
                         <uxap:actions />
@@ -271,6 +385,7 @@
                 <uxap:subSections>
                     <uxap:ObjectPageSubSection id="costSimulationSubSection">
                         <viz:VizFrame
+                            vizProperties="{ title: {text : 'Position cost simulation', visible : true}}"
                             id="chartContainer"
                             vizType="column"
                             width="600px"

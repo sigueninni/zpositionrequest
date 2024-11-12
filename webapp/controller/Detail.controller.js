@@ -55,16 +55,17 @@ sap.ui.define([
 
                 this.getOwnerComponent().getModel().metadataLoaded().then(this._onMetadataLoaded.bind(this));
 
-
+                /*******************************************************************************/
                 //TO_REPLACE wth real TimeLine data
+                /*******************************************************************************/
                 /*this below code for get the JSON Model form Manifest.json file*/
-                debugger;
                 const commentsDataModel = this.getOwnerComponent().getModel("commentData");
                 console.log({ commentsDataModel });
                 this.getView().setModel(commentsDataModel, "commentsModel");
 
-
-
+                /*******************************************************************************/
+                //TO_REPLACE with real Cost Simulation data
+                /*******************************************************************************/
                 var data = [{
                     "Year": "2024",
                     "Cost": 10000
@@ -248,5 +249,16 @@ sap.ui.define([
                     }
                 });
             },
+
+            /**
+             * Binds the vizChart model to display cost simulation by Year
+             * @function
+             * @param {string} sObjectPath path to the object to be bound to the view.
+             * @private
+             */
+            _bindCostSimulationChart: function () {
+
+            }
+
         });
     });
