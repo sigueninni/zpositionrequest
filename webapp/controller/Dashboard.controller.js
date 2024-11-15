@@ -47,6 +47,7 @@ sap.ui.define([
             /* =========================================================== */
             /* event handlers                                              */
             /* =========================================================== */
+
             /**
              * Event handler for the bypassed event, which is fired when no routing pattern matched.
              * If there was an object selected in the master list, that selection is removed.
@@ -63,6 +64,105 @@ sap.ui.define([
             onSelectionChange: function (oEvent) {
                 // get the list item, either from the listItem parameter or from the event's source itself (will depend on the device-dependent mode).
                 this._showDetail(oEvent.getParameter("listItem") || oEvent.getSource());
+            },
+
+            /**
+             * Event handler for the button create
+             * @param {sap.ui.base.Event} oEvent  the button Click event
+             * @public
+             */
+            onCreateButtonPress: function (oEvent) {
+
+                if (!this._oTypeFlowDialog) {
+                    this._oTypeFlowDialog = sap.ui.xmlfragment("lu.uni.zpositionrequest.fragment.TypeFlowChoice", this);
+                    this.getView().addDependent(this._oTypeFlowDialog);
+                    // forward compact/cozy style into Dialog
+                    this._oTypeFlowDialog.addStyleClass(this.getOwnerComponent().getContentDensityClass());
+                }
+                this._oTypeFlowDialog.open();
+
+            },
+            /**
+             * Event handler for the button create in TypeFlowChoice.fragment
+             * @param {sap.ui.base.Event} oEvent the button Click event
+             * @public
+             */
+            onConfirmTypeFlowButtonPress: function (oEvent) {
+                const sGroupId = "positionRequest" + (new Date().getUTCMilliseconds());
+                const oRouter = this.getRouter();
+                const oModel = this.getView().getModel();
+                let aDeferredGroups = oModel.getDeferredGroups();
+                // set this subset to deferred
+                aDeferredGroups = aDeferredGroups.concat([sGroupId]);
+                oModel.setDeferredGroups(aDeferredGroups);
+
+
+                //Get type Flow
+                debugger;
+                let reqFlow = sap.ui.getCore().byId("rgbFlowType").getSelectedButton().getId();
+
+                // set busy indicator during view binding
+                let oViewModel = this.getModel("masterView");
+                oViewModel.setProperty("/busy", true);
+                //sap.ui.core.BusyIndicator.show();
+
+                // create a new entry in model
+                oModel.createEntry("/PositionRequestSet", {
+                    groupId: sGroupId,
+                    properties: {
+                        "Version": 1,
+                        "Status": 1,
+                        "ReqFlow": reqFlow,
+                        "Title": this.getResourceBundle().getText("newPositionRequestTitle"),
+                        "CreatedOn": new Date()
+                    }
+                });
+
+                // initialize the request in backend and then navigate to object page for binding
+                oModel.submitChanges({
+                    groupId: sGroupId,
+                    success: function (oSuccess) {
+                        let oResponse = oSuccess.__batchResponses[0];
+                        if (oResponse.__changeResponses) {
+                            let oNewEntry = oResponse.__changeResponses[0].data;
+                            oViewModel.setProperty("/busy", false);
+                            oRouter.navTo("object", {
+                                "objectId": oNewEntry.Id //object key
+                            });
+                            // setTimeout(function() { 
+                            // 	oViewModel.setProperty("/busy", false);
+                            // 	//sap.ui.core.BusyIndicator.hide();
+                            // 	oRouter.navTo("object", {
+                            // 		"objectId": oNewEntry.Id //object key
+                            // 	});
+                            // }, 1500);
+                        } else {
+                            oViewModel.setProperty("/busy", false);
+                            //sap.ui.core.BusyIndicator.hide();
+                        }
+                    }
+                });
+            },
+
+            /**
+             * Event handler for the button Cancel in TypeFlowChoice.fragment
+             * @param {sap.ui.base.Event} oEvent the button Click event
+             * @public
+             */
+            onCancelTypeFlowButtonPres: function (oEvent) {
+                this._oTypeFlowDialog.close();
+                this._oTypeFlowDialog.destroy();
+                delete this._oTypeFlowDialog;
+            },
+
+            /**
+             * Event handler for the select event TypeFlowChoice.fragment
+             * @param {sap.ui.base.Event} oEvent the select event
+             * @public
+             */
+            setFlowTypeAtCreation: function (oEvent) {
+                debugger;
+                console.log(oEvent.getParameter("selectedIndex"));
             },
 
             /* =========================================================== */
@@ -88,7 +188,7 @@ sap.ui.define([
              * @private
              */
             _showDetail: function (oItem) {
-                var bReplace = !Device.system.phone;
+                const bReplace = !Device.system.phone;
                 this.getRouter().navTo("RouteDetail", {
                     positionRequestId: oItem.getBindingContext().getProperty("Guid")
                 }, bReplace);
