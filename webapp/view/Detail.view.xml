@@ -188,10 +188,10 @@
                                         text="{i18n>flowType}"
                                         required="true"
                                     />
+                                    <!-- items="{/FlowReqSet}" TODO -->
                                     <Select
                                         id="positionRequestFlow"
                                         forceSelection="true"
-                                        items="{/FlowReqSet}"
                                         selectedKey="{ path: 'flowType', type: 'sap.ui.model.type.Integer'}"
                                         enabled="{RequestSettings/IsFormEditable}"
                                         change=""
@@ -202,10 +202,10 @@
                                         />
                                     </Select>
                                     <Label text="{i18n>requestType}" />
+                                    <!-- items="{/TypeReqSet}" TODO-->
                                     <Select
                                         id="positionRequestType"
                                         forceSelection="true"
-                                        items="{/TypeReqSet}"
                                         selectedKey="{ path: 'requestType', type: 'sap.ui.model.type.Integer'}"
                                         enabled="{RequestSettings/IsFormEditable}"
                                         change=""
@@ -303,10 +303,10 @@
                                         valueHelpRequest="onPositionValueHelpPress"
                                     />
                                     <Label text="{i18n>personnelArea}" />
+                                    <!-- items="{/PersonnelAreaSet}"  TODO -->
                                     <Select
                                         id="personnelArea"
                                         forceSelection="false"
-                                        items="{/PersonnelAreaSet}"
                                         selectedKey="{Assignment/PersonnelArea}"
                                         enabled="{RequestSettings/IsFormEditable}"
                                         change="onSelectPersArea"
@@ -409,9 +409,9 @@
                                 showIcon="false"
                                 visible="{RequestSettings/IsCommentsEnabled}"
                             />
+                            <!-- items="{ path: 'Comments', sorter: { path: 'CreatedOn' } }" TODO -->
                             <List
                                 showSeparators="Inner"
-                                items="{ path: 'Comments', sorter: { path: 'CreatedOn' } }"
                                 mode="Delete"
                                 delete="onDeleteFeedItemBtnPressed"
                             >

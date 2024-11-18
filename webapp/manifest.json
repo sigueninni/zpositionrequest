@@ -71,16 +71,15 @@
                 }
             },
             "": {
-                "preload": true,
                 "dataSource": "Z_HR_POSITION_REQUEST_SRV",
                 "settings": {
-                    "defaultBindingMode": "TwoWay",
-                    "defaultCountMode": "Inline",
-                    "refreshAfterChange": false,
                     "metadataUrlParams": {
-                        "sap-value-list": "none"
-                    }
-                }
+                        "sap-documentation": "heading"
+                    },
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "Inline"
+                },
+                "preload": true
             },
             "commentData": {
                 "type": "sap.ui.model.json.JSONModel",

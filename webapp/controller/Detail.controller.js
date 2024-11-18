@@ -5,10 +5,12 @@ sap.ui.define([
     "sap/base/strings/formatMessage",
     "sap/ui/core/ValueState",
     "sap/viz/ui5/data/FlattenedDataset",
-    "sap/viz/ui5/controls/common/feeds/FeedItem"
+    "sap/viz/ui5/controls/common/feeds/FeedItem",
+    "sap/m/MessageBox",
+    "sap/m/MessageToast",
 
 ],
-    function (BaseController, JSONModel, formatter, formatMessage, ValueState, FlattenedDataset, FeedItem) {
+    function (BaseController, JSONModel, formatter, formatMessage, ValueState, FlattenedDataset, FeedItem, MessageBox, MessageToast) {
         "use strict";
 
         return BaseController.extend("lu.uni.zpositionrequest.controller.Detail", {
@@ -200,6 +202,41 @@ sap.ui.define([
                     oResourceBundle.getText("shareSendEmailObjectMessage", [sObjectName, sObjectId, location.href]));
 
                 // this._filterPersonnelSubareaValues();
+            },
+
+            /**
+          * Event handler for the button delete 
+          * @param {sap.ui.base.Event} oEvent the button Click event
+          * @public
+          */
+            onDeleteButtonPress: function (oEvent) {
+                const that = this;
+                const oView = this.getView();
+                const oModel = oView.getModel();
+
+                MessageBox.warning(this.getResourceBundle().getText("confirmDeletion"), {
+                    title: this.getResourceBundle().getText("confirmDeletionTitle"),
+                    actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
+                    initialFocus: MessageBox.Action.OK,
+                    onClose: function (oAction) {
+                        if (oAction === MessageBox.Action.OK) {
+                            // set busy indicator during view binding
+                            let oViewModel = that.getModel("detailView");
+                            oViewModel.setProperty("/busy", true);
+                            // delete the entry
+                            oModel.remove(oView.getBindingContext().getPath(), {
+                                success: function (oSuccess) {
+                                    oViewModel.setProperty("/busy", false);
+                                    MessageToast.show(that.getResourceBundle().getText("requestDeleted"));
+                                    that.getRouter().navTo("RouteMaster", that);
+                                    //  that.getRouter().getTargets().display("notFound");
+                                }
+                            });
+                        } else { //Request cancelled
+                            MessageToast.show(that.getResourceBundle().getText("deletionCancelled"));
+                        }
+                    }
+                });
             },
 
             /* =========================================================== */

@@ -82,6 +82,7 @@ sap.ui.define([
                 this._oTypeFlowDialog.open();
 
             },
+
             /**
              * Event handler for the button create in TypeFlowChoice.fragment
              * @param {sap.ui.base.Event} oEvent the button Click event
@@ -126,9 +127,9 @@ sap.ui.define([
                         if (oResponse.__changeResponses) {
                             let oNewEntry = oResponse.__changeResponses[0].data;
                             oViewModel.setProperty("/busy", false);
-                            oRouter.navTo("object", {
-                                "objectId": oNewEntry.Id //object key
-                            });
+                            oRouter.navTo("RouteDetail", {
+                                positionRequestId: oNewEntry.Guid
+                            }, true);
                             // setTimeout(function() { 
                             // 	oViewModel.setProperty("/busy", false);
                             // 	//sap.ui.core.BusyIndicator.hide();
@@ -140,7 +141,12 @@ sap.ui.define([
                             oViewModel.setProperty("/busy", false);
                             //sap.ui.core.BusyIndicator.hide();
                         }
-                    }
+
+                        this._oTypeFlowDialog.close();
+                        this._oTypeFlowDialog.destroy();
+                        delete this._oTypeFlowDialog;
+
+                    }.bind(this)
                 });
             },
 
@@ -164,6 +170,7 @@ sap.ui.define([
                 debugger;
                 console.log(oEvent.getParameter("selectedIndex"));
             },
+
 
             /* =========================================================== */
             /*  internal methods                                     */
@@ -203,19 +210,21 @@ sap.ui.define([
              * @private
              */
             _onMasterMatched: function () {
-
-
-                // if (this.getOwnerComponent().getComponentData() && this.getOwnerComponent().getComponentData().startupParameters) {
-
-                //     //TODO check why not working in FLP mode and why undefined in noFlp
-                //     const startupParams = this.getOwnerComponent().getComponentData().startupParameters; // get Startup params from Owner Component
-                //     if ((startupParams.objectId && startupParams.objectId[0])) {
-
-                //         // this._oList.removeAllItems();
-                //         this.getRouter().navTo("object", {
-                //             objectId: startupParams.objectId[0]  // read Supplier ID. Every parameter is placed in an array therefore [0] holds the value
-                //         }, true);
-                //     } else {
+                // debugger;
+                /*           if (this.getOwnerComponent().getComponentData() && this.getOwnerComponent().getComponentData().startupParameters) {
+          
+                              //TODO check why not working in FLP mode and why undefined in noFlp
+                              const startupParams = this.getOwnerComponent().getComponentData().startupParameters; // get Startup params from Owner Component
+                              if ((startupParams.objectId && startupParams.objectId[0])) {
+          
+                                  this._oList.removeAllItems();
+                                  this.getRouter().navTo("object", {
+                                      objectId: startupParams.objectId[0]  // read Supplier ID. Every parameter is placed in an array therefore [0] holds the value
+                                  }, true);
+                              }
+          
+                          }
+                          else { */
                 this.getOwnerComponent().oListSelector.oWhenListLoadingIsDone.then(
 
                     function (mParams) {
@@ -238,8 +247,7 @@ sap.ui.define([
                         this.getRouter().getTargets().display("detailNoObjectsAvailable");
                     }.bind(this)
                 );
-                //     }
-                // }
+                //  }
             },
 
 
