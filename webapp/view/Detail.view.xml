@@ -184,38 +184,60 @@
                             >
                                 <form:content>
                                     <core:Title text="{i18n>requestFlowType}" />
-                                    <Label
-                                        text="{i18n>flowType}"
-                                        required="true"
-                                    />
-                                    <!-- items="{/FlowReqSet}" TODO -->
-                                    <Select
-                                        id="positionRequestFlow"
-                                        forceSelection="true"
-                                        selectedKey="{ path: 'flowType', type: 'sap.ui.model.type.Integer'}"
-                                        enabled="{RequestSettings/IsFormEditable}"
-                                        change=""
-                                    >
-                                        <core:Item
-                                            text="{Description}"
-                                            key="{Type}"
+                                    <l:VerticalLayout>
+                                        <Label
+                                            text="{i18n>requestType}"
+                                            required="true"
                                         />
-                                    </Select>
-                                    <Label text="{i18n>requestType}" />
-                                    <!-- items="{/TypeReqSet}" TODO-->
-                                    <Select
-                                        id="positionRequestType"
-                                        forceSelection="true"
-                                        selectedKey="{ path: 'requestType', type: 'sap.ui.model.type.Integer'}"
-                                        enabled="{RequestSettings/IsFormEditable}"
-                                        change=""
-                                    >
-                                        <core:Item
-                                            text="{Description}"
-                                            key="{Type}"
-                                        />
-                                    </Select>
+                                        <!-- items="{/TypeReqSet}" TODO-->
+                                        <Select
+                                            fieldGroupIds="positionRequestType"
+                                            forceSelection="true"
+                                            items="{
+                                        path : '/RequestTypeSet',
+                                        sorter: {
+                                            path: 'Type',
+                                            descending: true
+                                        },
+                                        filters : [
+                                            { path : 'ReqFlow', operator : 'EQ', value1 :'c' }
+                                        ]
+                                    }"
+                                            selectedKey="{ReqType', type: 'sap.ui.model.type.String'}"
+                                            enabled="{RequestSettings/IsFormEditable}"
+                                            change=""
+                                            visible="{= ${ReqFlow} === 'c' }"
+                                        >
+                                            <core:Item
+                                                text="{Description}"
+                                                key="{Type}"
+                                            />
+                                        </Select>
 
+                                        <Select
+                                            fieldGroupIds="positionRequestType"
+                                            forceSelection="true"
+                                            items="{
+                                        path : '/RequestTypeSet',
+                                        sorter: {
+                                            path: 'Type',
+                                            descending: true
+                                        },
+                                        filters : [
+                                            { path : 'ReqFlow', operator : 'EQ', value1 :'u' }
+                                        ]
+                                    }"
+                                            selectedKey="{ReqType', type: 'sap.ui.model.type.String'}"
+                                            enabled="{RequestSettings/IsFormEditable}"
+                                            change=""
+                                            visible="{= ${ReqFlow} === 'u' }"
+                                        >
+                                            <core:Item
+                                                text="{Description}"
+                                                key="{Type}"
+                                            />
+                                        </Select>
+                                    </l:VerticalLayout>
                                     <core:Title text="{i18n>Dates}" />
                                     <Label text="{i18n>contractType}" />
                                     <Select

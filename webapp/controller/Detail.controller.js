@@ -148,7 +148,6 @@ sap.ui.define([
                         oModel.resetChanges();
                     }
 
-
                     //TODO -> Validation checks
                     //   this._resetValidationChecks();
 
@@ -169,6 +168,7 @@ sap.ui.define([
                         Guid: sObjectId
                     });
                     this._bindView("/" + sObjectPath);
+                    debugger;
                 }.bind(this));
             },
 
