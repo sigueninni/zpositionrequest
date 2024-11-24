@@ -110,6 +110,7 @@
         </uxap:headerTitle>
         <uxap:headerContent>
             <l:VerticalLayout>
+                <ObjectAttribute text="{Requid}" />
                 <ObjectAttribute
                     title="{i18n>createdOn}"
                     text="{path: 'CreatedOn', type: 'sap.ui.model.type.Date', formatOptions: { style: 'medium', strictParsing: true, relative: false, pattern: 'dd/MM/yyyy', UTC: true }}"
@@ -184,15 +185,16 @@
                             >
                                 <form:content>
                                     <core:Title text="{i18n>requestFlowType}" />
+                                    <!-- Begin : Dynamic type of position Request-->
                                     <l:VerticalLayout>
                                         <Label
                                             text="{i18n>requestType}"
                                             required="true"
                                         />
-                                        <!-- items="{/TypeReqSet}" TODO-->
+
                                         <Select
                                             fieldGroupIds="positionRequestType"
-                                            forceSelection="true"
+                                            forceSelection="false"
                                             items="{
                                         path : '/RequestTypeSet',
                                         sorter: {
@@ -203,9 +205,8 @@
                                             { path : 'ReqFlow', operator : 'EQ', value1 :'c' }
                                         ]
                                     }"
-                                            selectedKey="{ReqType', type: 'sap.ui.model.type.String'}"
+                                            selectedKey="{ReqType}"
                                             enabled="{RequestSettings/IsFormEditable}"
-                                            change=""
                                             visible="{= ${ReqFlow} === 'c' }"
                                         >
                                             <core:Item
@@ -216,18 +217,18 @@
 
                                         <Select
                                             fieldGroupIds="positionRequestType"
-                                            forceSelection="true"
+                                            forceSelection="false"
                                             items="{
                                         path : '/RequestTypeSet',
                                         sorter: {
                                             path: 'Type',
                                             descending: true
-                                        },
+                                        },  
                                         filters : [
                                             { path : 'ReqFlow', operator : 'EQ', value1 :'u' }
                                         ]
                                     }"
-                                            selectedKey="{ReqType', type: 'sap.ui.model.type.String'}"
+                                            selectedKey="{ReqType}"
                                             enabled="{RequestSettings/IsFormEditable}"
                                             change=""
                                             visible="{= ${ReqFlow} === 'u' }"
@@ -238,31 +239,50 @@
                                             />
                                         </Select>
                                     </l:VerticalLayout>
-                                    <core:Title text="{i18n>Dates}" />
-                                    <Label text="{i18n>contractType}" />
+                                    <Label
+                                        text="{i18n>contractType}"
+                                        required="true"
+                                    />
                                     <Select
                                         id="contractType"
-                                        forceSelection="true"
+                                        forceSelection="false"
+                                        items="{/ContratTypeSet}"
+                                        selectedKey="{ReqType}"
+                                        enabled="{RequestSettings/IsFormEditable}"
                                         change=""
                                     >
                                         <core:Item
-                                            text="CDI"
-                                            key="cdi"
-                                        />
-                                        <core:Item
-                                            text="CDD"
-                                            key="cdd"
+                                            text="{Description}"
+                                            key="{Type}"
                                         />
                                     </Select>
-                                    <Label text="{i18n>startDate}" />
-                                    <DatePicker
-                                        id="startDate"
-                                        value="{ path: 'StartDate', type: 'sap.ui.model.type.Date', formatOptions: { style: 'medium', strictParsing: true, relative: false, pattern: 'dd/MM/yyyy', UTC: true }}"
-                                        editable="{RequestSettings/IsFormEditable}"
-                                        required="true"
-                                        change="updateAmounts"
-                                    />
+                                    <!-- End Dynamic type of position Request-->
                                     <core:Title text="{i18n>Dates}" />
+                                    <l:VerticalLayout>
+                                        <Label
+                                            text="{i18n>startDate}"
+                                            required="true"
+                                        />
+                                        <DatePicker
+                                            id="startDate"
+                                            value="{ path: 'StartDate', type: 'sap.ui.model.type.Date', formatOptions: { style: 'medium', strictParsing: true, relative: false, pattern: 'dd/MM/yyyy', UTC: true }}"
+                                            editable="{RequestSettings/IsFormEditable}"
+                                            required="true"
+                                            change="updateAmounts"
+                                        />
+                                        <Label
+                                            text="{i18n>endDate}"
+                                            required="true"
+                                        />
+                                        <DatePicker
+                                            id="endDate"
+                                            value="{ path: 'EndDate', type: 'sap.ui.model.type.Date', formatOptions: { style: 'medium', strictParsing: true, relative: false, pattern: 'dd/MM/yyyy', UTC: true }}"
+                                            editable="false"
+                                            required="true"
+                                            change="updateAmounts"
+                                        />
+                                    </l:VerticalLayout>
+                                    <!-- <core:Title text="{i18n>Dates}" />
                                     <Label text="{i18n>startDate}" />
                                     <DatePicker
                                         id="startDate2"
@@ -270,7 +290,7 @@
                                         editable="{RequestSettings/IsFormEditable}"
                                         required="true"
                                         change="updateAmounts"
-                                    />
+                                    /> -->
                                 </form:content>
                             </form:SimpleForm>
                         </uxap:blocks>

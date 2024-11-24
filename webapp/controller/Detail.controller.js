@@ -7,7 +7,7 @@ sap.ui.define([
     "sap/viz/ui5/data/FlattenedDataset",
     "sap/viz/ui5/controls/common/feeds/FeedItem",
     "sap/m/MessageBox",
-    "sap/m/MessageToast",
+    "sap/m/MessageToast"
 
 ],
     function (BaseController, JSONModel, formatter, formatMessage, ValueState, FlattenedDataset, FeedItem, MessageBox, MessageToast) {
@@ -168,7 +168,13 @@ sap.ui.define([
                         Guid: sObjectId
                     });
                     this._bindView("/" + sObjectPath);
-                    debugger;
+
+                    /*******************************************************************************/
+                    //Initial controls of Dates, retro etc...
+                    /*******************************************************************************/
+                    //this._getTimeConstraints();
+
+
                 }.bind(this));
             },
 
@@ -202,6 +208,8 @@ sap.ui.define([
                     oResourceBundle.getText("shareSendEmailObjectMessage", [sObjectName, sObjectId, location.href]));
 
                 // this._filterPersonnelSubareaValues();
+
+                this._getTimeConstraints();
             },
 
             /**
@@ -259,6 +267,65 @@ sap.ui.define([
             },
 
 
+
+            _getTimeConstraints: function () {
+                /*  //Start Date 
+                 --> Not in the past
+                 --> Limit Year + 4 
+                 --> Only '01' or '15' of the month */
+                debugger;
+
+                const oModel = this.getView().getModel();
+
+                const bindingContext = this.getView().getBindingContext();
+                const path = bindingContext.getPath();
+                const object = bindingContext.getModel().getProperty(path);
+                let oPositionRequest = bindingContext.getObject(); //getProperty("ReqFlow"); //bindingContext.getObject()
+                let oStartDate = this.byId("startDate");
+
+                // //   ReqType
+                // oDataModel.callFunction("/getDateConstraints", {
+                //     method: "GET",   // function import name                      
+                //     //urlParameters: { "ReqFlow": oPositionRequest.ReqFlow }, // function import parameters 
+                //     success: function (oData, response) { debugger; },      // callback function for success
+                //     error: function (oError) { debugger; }                  // callback function for error
+                // });
+
+
+                oModel.setProperty("/busy", true);
+
+                oModel.callFunction("/getDateSettings", {
+                    method: "GET",
+                    urlParameters: {
+                        "ReqType": '',
+                        "ReqFlow": 'c'//oPositionRequest.ReqFlow
+                    },
+                    success: function (oSuccess) {
+                        debugger;
+                        oModel.setProperty("/busy", false);
+                        oModel.refresh();
+                    },
+                    error: function (oError) {
+                        debugger;
+                        oModel.setProperty("/busy", false);
+                        var oFunctError = JSON.parse(oError.responseText);
+                        MessageBox.error(oFunctError.error.message.value);
+                    }
+                });
+
+
+                /*                 let today = new Date();
+                                let jjToday = today.getDay();
+                                //if
+                
+                                oStartDate.setMinDate(new Date(2016, 0, 1));
+                                oStartDate.setMaxDate(new Date(2016, 11, 31));
+                                oStartDate.setDateValue(new Date(2016, 1, 16)); */
+
+
+            },
+
+
             /**
              * Binds the view to the object path. Makes sure that detail view displays
              * a busy indicator while data for the corresponding element binding is loaded.
@@ -267,6 +334,7 @@ sap.ui.define([
              * @private
              */
             _bindView: function (sObjectPath) {
+                let that = this;
                 const oView = this.getView();
                 // Set busy indicator during view binding
                 let oViewModel = this.getModel("detailView");
@@ -281,7 +349,9 @@ sap.ui.define([
                             oViewModel.setProperty("/busy", true);
                         },
                         dataReceived: function () {
+
                             oViewModel.setProperty("/busy", false);
+                            //that._getTimeConstraints();
                         }
                     }
                 });
