@@ -61,7 +61,27 @@ sap.ui.define([
             } else {
                 this.getRouter().navTo("master", {}, true);
             }
-        }
+        },
+        /**
+     * Set Controls Id Enablement to isEnabled( parameter)
+     * @method setEnabled
+     * @param  {arr} Array of controls Id, isEnabled( boolean)
+     */
+        setEnabled: function (arr, isEnabled) {
+            for (let id of arr) {
+                this.getView().byId(id).setEnabled(isEnabled);
+            }
+        },
+        /**
+     * Set Controls Id Visibility to isVisible( parameter)
+     * @method setVisible
+     * @param  {arr} Array of controls Id, isVisible( boolean)
+     */
+        setEnabled: function (arr, isVisible) {
+            for (let id of arr) {
+                this.getView().byId(id).setVisible(isVisible);
+            }
+        },
 
     });
 

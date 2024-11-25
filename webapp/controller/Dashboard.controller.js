@@ -1,3 +1,14 @@
+/**    **********************************************************************-->
+<!--* Projet           :  UNI			          							*-->
+<!--* Module           :  Position Request			             		    *-->
+<!--* Auteur           :  Saad Igueninni                            		*-->
+<!--* Societe      	   :  KYWAN                                          	*-->
+<!--* Date de creation :  20/11/2024                                		*-->
+<!--* Version	       :  Initial											*-->
+<!--* Description  	   :  Master(Dashboard) Controller for Position         *-->
+<!--*                     Request App                                       *-->
+<!--*********************************************************************   ***/
+
 sap.ui.define([
     "lu/uni/zpositionrequest/controller/BaseController",
     "sap/ui/model/json/JSONModel",

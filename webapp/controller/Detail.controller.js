@@ -255,6 +255,24 @@ sap.ui.define([
             */
             onStartDateChange: function (oEvent) {
 
+                debugger;
+                let
+                    oStartDate = oEvent.getSource(),
+                    valueStartDate = oEvent.getParameter("value"),
+                    daysStartDate = valueStartDate.substring(0, 2);
+
+
+
+
+                if (daysStartDate !== '01' && daysStartDate !== '15') {
+                    oStartDate.setValueState(ValueState.Error);
+                    oStartDate.setValueStateText("Only 01 or 15 of the month! - TODO : demander le message! ");
+                } else {
+                    oStartDate.setValueState(ValueState.None);
+                }
+
+                /*                 valueStateText
+                                valueState - "None" Error */
 
 
 
@@ -267,6 +285,15 @@ sap.ui.define([
             * @public
             */
             onContractTypeChange: function (oEvent) {
+                this._getTimeConstraints();
+            },
+
+            /**
+               * Event handler for the onChange stepInput : Duration in months
+               * @param {sap.ui.base.Event} oEvent the stepInput OnChange event
+               * @public
+               */
+            onDurationMonthsChange: function (oEvent) {
                 this._getTimeConstraints();
             },
 
@@ -307,19 +334,23 @@ sap.ui.define([
                 const path = bindingContext.getPath();
                 const object = bindingContext.getModel().getProperty(path);
                 let oPositionRequest = bindingContext.getObject(); //getProperty("ReqFlow"); //bindingContext.getObject()
+                let startDate = oPositionRequest.StartDate;
+                let oUrlParam = {
+                    "ReqType": oPositionRequest.ReqType,
+                    "ReqFlow": oPositionRequest.ReqFlow,
+                    //"StartDate": startDate,
+                    "ContractType": oPositionRequest.ContractType,
+                    "DurationInMonths": oPositionRequest.DurationInMonths
 
-                let startDate = oPositionRequest.StartDate || "";
+                };
+
+                if (startDate) { oUrlParam.StartDate = startDate; }
+
                 oModel.setProperty("/busy", true);
 
                 oModel.callFunction("/getDateSettings", {
                     method: "GET",
-                    urlParameters: {
-                        "ReqType": oPositionRequest.ReqType,
-                        "ReqFlow": oPositionRequest.ReqFlow,
-                        "StartDate": startDate,
-                        "ContractType": oPositionRequest.ContractType,
-
-                    },
+                    urlParameters: oUrlParam,
                     success: function (oSuccess) {
                         debugger;
                         oModel.setProperty("/busy", false);

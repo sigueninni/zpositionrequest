@@ -186,16 +186,16 @@
                                 <form:content>
                                     <core:Title text="{i18n>requestFlowType}" />
                                     <!-- Begin : Dynamic type of position Request-->
-                                    <l:VerticalLayout>
-                                        <Label
-                                            text="{i18n>requestType}"
-                                            required="true"
-                                        />
+                                    <!-- <l:VerticalLayout> -->
+                                    <Label
+                                        text="{i18n>requestType}"
+                                        required="true"
+                                    />
 
-                                        <Select
-                                            fieldGroupIds="positionRequestType"
-                                            forceSelection="false"
-                                            items="{
+                                    <Select
+                                        fieldGroupIds="positionRequestType"
+                                        forceSelection="false"
+                                        items="{
                                         path : '/RequestTypeSet',
                                         sorter: {
                                             path: 'Type',
@@ -205,20 +205,20 @@
                                             { path : 'ReqFlow', operator : 'EQ', value1 :'c' }
                                         ]
                                     }"
-                                            selectedKey="{ReqType}"
-                                            enabled="{RequestSettings/IsFormEditable}"
-                                            visible="{= ${ReqFlow} === 'c' }"
-                                        >
-                                            <core:Item
-                                                text="{Description}"
-                                                key="{Type}"
-                                            />
-                                        </Select>
+                                        selectedKey="{ReqType}"
+                                        enabled="{RequestSettings/IsFormEditable}"
+                                        visible="{= ${ReqFlow} === 'c' }"
+                                    >
+                                        <core:Item
+                                            text="{Description}"
+                                            key="{Type}"
+                                        />
+                                    </Select>
 
-                                        <Select
-                                            fieldGroupIds="positionRequestType"
-                                            forceSelection="false"
-                                            items="{
+                                    <Select
+                                        fieldGroupIds="positionRequestType"
+                                        forceSelection="false"
+                                        items="{
                                         path : '/RequestTypeSet',
                                         sorter: {
                                             path: 'Type',
@@ -228,17 +228,17 @@
                                             { path : 'ReqFlow', operator : 'EQ', value1 :'u' }
                                         ]
                                     }"
-                                            selectedKey="{ReqType}"
-                                            enabled="{RequestSettings/IsFormEditable}"
-                                            change=""
-                                            visible="{= ${ReqFlow} === 'u' }"
-                                        >
-                                            <core:Item
-                                                text="{Description}"
-                                                key="{Type}"
-                                            />
-                                        </Select>
-                                    </l:VerticalLayout>
+                                        selectedKey="{ReqType}"
+                                        enabled="{RequestSettings/IsFormEditable}"
+                                        change=""
+                                        visible="{= ${ReqFlow} === 'u' }"
+                                    >
+                                        <core:Item
+                                            text="{Description}"
+                                            key="{Type}"
+                                        />
+                                    </Select>
+                                    <!-- </l:VerticalLayout> -->
                                     <Label
                                         text="{i18n>contractType}"
                                         required="true"
@@ -256,35 +256,48 @@
                                             key="{Type}"
                                         />
                                     </Select>
+                                    <Label
+                                        text="{i18n>durationMonths}"
+                                        wrapping="true"
+                                    />
+                                    <StepInput
+                                        min="0"
+                                        max="99"
+                                        step="0.5"
+                                        value="{DurationInMonths}"
+                                        displayValuePrecision="1"
+                                        visible="{= ${ContractType} === 'CDD' }"
+                                        change=".onDurationMonthsChange"
+                                    />
                                     <!-- End Dynamic type of position Request-->
                                     <core:Title text="{i18n>Dates}" />
-                                    <l:VerticalLayout>
-                                        <Label
-                                            text="{i18n>startDate}"
-                                            required="true"
-                                        />
-                                        <DatePicker
-                                            id="startDate"
-                                            value="{ path: 'StartDate', type: 'sap.ui.model.type.Date', formatOptions: { style: 'medium', strictParsing: true, relative: false, pattern: 'dd/MM/yyyy', UTC: true }}"
-                                            editable="{RequestSettings/IsFormEditable}"
-                                            required="true"
-                                            minDate="{datesModel>/MinDate}"
-                                            maxDate="{datesModel>/MaxDate}"
-                                            dateValue="{datesModel>/MinDate}"
-                                            change=".onStartDateChange"
-                                        />
-                                        <Label
-                                            text="{i18n>endDate}"
-                                            required="true"
-                                        />
-                                        <DatePicker
-                                            id="endDate"
-                                            value="{ path: 'EndDate', type: 'sap.ui.model.type.Date', formatOptions: { style: 'medium', strictParsing: true, relative: false, pattern: 'dd/MM/yyyy', UTC: true }}"
-                                            editable="false"
-                                            required="true"
-                                            change="updateAmounts"
-                                        />
-                                    </l:VerticalLayout>
+                                    <!-- <l:VerticalLayout> -->
+                                    <Label
+                                        text="{i18n>startDate}"
+                                        required="true"
+                                    />
+                                    <DatePicker
+                                        id="startDate"
+                                        value="{ path: 'StartDate', type: 'sap.ui.model.type.Date', formatOptions: { style: 'medium', strictParsing: true, relative: false, pattern: 'dd/MM/yyyy', UTC: true }}"
+                                        editable="{RequestSettings/IsFormEditable}"
+                                        required="true"
+                                        minDate="{datesModel>/MinDate}"
+                                        maxDate="{datesModel>/MaxDate}"
+                                        dateValue="{StartDate}"
+                                        change=".onStartDateChange"
+                                    />
+                                    <Label
+                                        text="{i18n>endDate}"
+                                        required="true"
+                                    />
+                                    <DatePicker
+                                        id="endDate"
+                                        value="{ path: 'EndDate', type: 'sap.ui.model.type.Date', formatOptions: { style: 'medium', strictParsing: true, relative: false, pattern: 'dd/MM/yyyy', UTC: true }}"
+                                        editable="false"
+                                        required="true"
+                                        change="updateAmounts"
+                                    />
+                                    <!-- </l:VerticalLayout> -->
                                     <!-- <core:Title text="{i18n>Dates}" />
                                     <Label text="{i18n>startDate}" />
                                     <DatePicker
