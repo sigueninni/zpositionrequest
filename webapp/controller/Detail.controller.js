@@ -247,6 +247,29 @@ sap.ui.define([
                 });
             },
 
+
+            /**
+            * Event handler for the onChange datePicker : startDate
+            * @param {sap.ui.base.Event} oEvent the button OnChange event
+            * @public
+            */
+            onStartDateChange: function (oEvent) {
+
+
+
+
+
+            },
+
+            /**
+            * Event handler for the onChange select : contractType
+            * @param {sap.ui.base.Event} oEvent the button OnChange event
+            * @public
+            */
+            onContractTypeChange: function (oEvent) {
+                this._getTimeConstraints();
+            },
+
             /* =========================================================== */
             /* Internal methods                                     */
             /* =========================================================== */
@@ -266,8 +289,11 @@ sap.ui.define([
                 oViewModel.setProperty("/delay", iOriginalViewBusyDelay);
             },
 
-
-
+            /**
+             * Call a functionImport to get dates constraints
+             * @function
+             * @private
+             */
             _getTimeConstraints: function () {
                 /*  //Start Date 
                  --> Not in the past
@@ -281,30 +307,31 @@ sap.ui.define([
                 const path = bindingContext.getPath();
                 const object = bindingContext.getModel().getProperty(path);
                 let oPositionRequest = bindingContext.getObject(); //getProperty("ReqFlow"); //bindingContext.getObject()
-                let oStartDate = this.byId("startDate");
 
-                // //   ReqType
-                // oDataModel.callFunction("/getDateConstraints", {
-                //     method: "GET",   // function import name                      
-                //     //urlParameters: { "ReqFlow": oPositionRequest.ReqFlow }, // function import parameters 
-                //     success: function (oData, response) { debugger; },      // callback function for success
-                //     error: function (oError) { debugger; }                  // callback function for error
-                // });
-
-
+                let startDate = oPositionRequest.StartDate || "";
                 oModel.setProperty("/busy", true);
 
                 oModel.callFunction("/getDateSettings", {
                     method: "GET",
                     urlParameters: {
-                        "ReqType": '',
-                        "ReqFlow": 'c'//oPositionRequest.ReqFlow
+                        "ReqType": oPositionRequest.ReqType,
+                        "ReqFlow": oPositionRequest.ReqFlow,
+                        "StartDate": startDate,
+                        "ContractType": oPositionRequest.ContractType,
+
                     },
                     success: function (oSuccess) {
                         debugger;
                         oModel.setProperty("/busy", false);
+                        let oDateSettings = oSuccess.getDateSettings;
+                        let oDatesModel = new JSONModel(oDateSettings);
+                        this.getView().setModel(oDatesModel, 'datesModel');
+
+                        //  if (oDateSettings && oDateSettings.EndDate)
+                        oModel.setProperty("EndDate", oDateSettings.EndDate, this.getView().getBindingContext());
+
                         oModel.refresh();
-                    },
+                    }.bind(this),
                     error: function (oError) {
                         debugger;
                         oModel.setProperty("/busy", false);
@@ -313,18 +340,7 @@ sap.ui.define([
                     }
                 });
 
-
-                /*                 let today = new Date();
-                                let jjToday = today.getDay();
-                                //if
-                
-                                oStartDate.setMinDate(new Date(2016, 0, 1));
-                                oStartDate.setMaxDate(new Date(2016, 11, 31));
-                                oStartDate.setDateValue(new Date(2016, 1, 16)); */
-
-
             },
-
 
             /**
              * Binds the view to the object path. Makes sure that detail view displays

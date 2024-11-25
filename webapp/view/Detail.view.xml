@@ -247,9 +247,9 @@
                                         id="contractType"
                                         forceSelection="false"
                                         items="{/ContratTypeSet}"
-                                        selectedKey="{ReqType}"
+                                        selectedKey="{ContractType}"
                                         enabled="{RequestSettings/IsFormEditable}"
-                                        change=""
+                                        change=".onContractTypeChange"
                                     >
                                         <core:Item
                                             text="{Description}"
@@ -268,7 +268,10 @@
                                             value="{ path: 'StartDate', type: 'sap.ui.model.type.Date', formatOptions: { style: 'medium', strictParsing: true, relative: false, pattern: 'dd/MM/yyyy', UTC: true }}"
                                             editable="{RequestSettings/IsFormEditable}"
                                             required="true"
-                                            change="updateAmounts"
+                                            minDate="{datesModel>/MinDate}"
+                                            maxDate="{datesModel>/MaxDate}"
+                                            dateValue="{datesModel>/MinDate}"
+                                            change=".onStartDateChange"
                                         />
                                         <Label
                                             text="{i18n>endDate}"
