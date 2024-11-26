@@ -255,14 +255,10 @@ sap.ui.define([
             */
             onStartDateChange: function (oEvent) {
 
-                debugger;
                 let
                     oStartDate = oEvent.getSource(),
                     valueStartDate = oEvent.getParameter("value"),
                     daysStartDate = valueStartDate.substring(0, 2);
-
-
-
 
                 if (daysStartDate !== '01' && daysStartDate !== '15') {
                     oStartDate.setValueState(ValueState.Error);
@@ -270,12 +266,7 @@ sap.ui.define([
                 } else {
                     oStartDate.setValueState(ValueState.None);
                 }
-
-                /*                 valueStateText
-                                valueState - "None" Error */
-
-
-
+                this._getTimeConstraints();
 
             },
 
@@ -359,9 +350,11 @@ sap.ui.define([
                         this.getView().setModel(oDatesModel, 'datesModel');
 
                         //  if (oDateSettings && oDateSettings.EndDate)
+                        if (this.byId("startDate").getValue() === '')
+                            oModel.setProperty("StartDate", oDateSettings.DateInitial, this.getView().getBindingContext());
                         oModel.setProperty("EndDate", oDateSettings.EndDate, this.getView().getBindingContext());
 
-                        oModel.refresh();
+                        // oModel.refresh();
                     }.bind(this),
                     error: function (oError) {
                         debugger;

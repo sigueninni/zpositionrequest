@@ -283,7 +283,6 @@
                                         required="true"
                                         minDate="{datesModel>/MinDate}"
                                         maxDate="{datesModel>/MaxDate}"
-                                        dateValue="{StartDate}"
                                         change=".onStartDateChange"
                                     />
                                     <Label
