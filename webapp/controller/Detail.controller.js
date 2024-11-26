@@ -124,6 +124,10 @@ sap.ui.define([
                 oChartContainer.addFeed(oCategoryFeed);
                 oChartContainer.addFeed(oRevenueFeed);
 
+                // create table content
+                var oTable = this.getView().byId("idTable");
+
+
             },
 
 
@@ -288,7 +292,8 @@ sap.ui.define([
                 this._getTimeConstraints();
             },
 
-
+            /********************************  Begin Job management ********************************************/
+            //TODO signature
             onJobGroupValueHelpPress: function (oEvent) {
 
                 const oView = this.getView();
@@ -303,6 +308,43 @@ sap.ui.define([
                 this.fragments._oJobGroupDialog.open();
             },
 
+            onConfirmJobGroupSelectDialogPress: function (oEvent) {
+                var oView = this.getView();
+                var aContexts = oEvent.getParameter("selectedContexts");
+                // get back the selected entry data
+                if (aContexts && aContexts.length) {
+                    // now set the returned values back into the view
+                    oView.byId("jobGroup").setValue(
+                        aContexts.map(function (oContext) {
+                            return oContext.getObject().JobGroupId;
+                        }).join(", "));
+
+                    oView.byId("jobGroup").setDescription(
+                        aContexts.map(function (oContext) {
+                            return oContext.getObject().JobGroupStext;
+                        }).join(", "));
+                }
+                // clear filters
+                oEvent.getSource().getBinding("items").filter([]);
+                // destroy the dialog
+                if (this.fragments._oJobGroupDialog) {
+                    this.fragments._oJobGroupDialog.destroy();
+                    delete this.fragments._oJobGroupDialog;
+                }
+            },
+
+            onSearchJobGroupSelectDialogPress: function (oEvent) {
+                var sValue = oEvent.getParameter("value").toString();
+                if (sValue !== "") {
+                    var oFilter = new Filter("JobGroupId", sap.ui.model.FilterOperator.Contains, sValue);
+                    var oBinding = oEvent.getSource().getBinding("items");
+                    oBinding.filter([oFilter]);
+                } else {
+                    // clear filters
+                    oEvent.getSource().getBinding("items").filter([]);
+                }
+            },
+            /********************************  End Job management ********************************************/
 
             /* =========================================================== */
             /* Internal methods                                     */

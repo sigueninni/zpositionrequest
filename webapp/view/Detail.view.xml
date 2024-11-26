@@ -2,6 +2,7 @@
     controllerName="lu.uni.zpositionrequest.controller.Detail"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
+    xmlns:commons="sap.suite.ui.commons"
     xmlns:c="sap.suite.ui.commons"
     xmlns:uxap="sap.uxap"
     xmlns:l="sap.ui.layout"
@@ -204,7 +205,7 @@
                                         filters : [
                                             { path : 'ReqFlow', operator : 'EQ', value1 :'c' }
                                         ]
-                                    }"
+                                        }"
                                         selectedKey="{ReqType}"
                                         enabled="{RequestSettings/IsFormEditable}"
                                         visible="{= ${ReqFlow} === 'c' }"
@@ -330,6 +331,20 @@
                                         required="true"
                                     />
 
+                                    <Label text="{i18n>job}" />
+                                    <Input
+                                        id="job"
+                                        type="Text"
+                                        value="{Job}"
+                                        maxLength="8"
+                                        showValueHelp="true"
+                                        valueHelpOnly="true"
+                                        valueHelpRequest=".onJobValueHelpPress"
+                                        editable="{RequestSettings/IsFormEditable}"
+                                        visible="{= ${JobGroup} !== '' }"
+                                        required="true"
+                                    />
+
                                     <!--          maxLength="8" description="{Assignment/PositionName}" showValueHelp="true"
 										valueHelpOnly="true" valueHelpRequest="onPositionValueHelpPress -->
                                 </form:content>
@@ -438,13 +453,121 @@
             >
                 <uxap:subSections>
                     <uxap:ObjectPageSubSection id="costSimulationSubSection">
-                        <viz:VizFrame
+                        <!--        <viz:VizFrame
                             vizProperties="{ title: {text : 'Position cost simulation', visible : true}}"
                             id="chartContainer"
                             vizType="column"
                             width="600px"
                             height="400px"
-                        />
+                        /> -->
+                        <commons:ChartContainer
+                            id="idChartContainer"
+                            showFullScreen="true"
+                            showPersonalization="true"
+                            autoAdjustHeight="false"
+                            title="Cost Simulation"
+                        >
+                            <commons:content>
+                                <commons:ChartContainerContent
+                                    icon="sap-icon://column-chart-dual-axis"
+                                    title="Column Chart - Cost simulation"
+                                >
+                                    <commons:content>
+                                        <viz:VizFrame
+                                            uiConfig="{applicationSet:'fiori'}"
+                                            vizProperties="{ title: {text : 'Position cost simulation', visible : true}}"
+                                            id="chartContainer"
+                                            vizType="column"
+                                            width="600px"
+                                            height="400px"
+                                        />
+                                    </commons:content>
+                                </commons:ChartContainerContent>
+                                <commons:ChartContainerContent
+                                    icon="sap-icon://table-view"
+                                    title="Table"
+                                >
+                                    <commons:content>
+                                        <!-- <Table id="idTable" /> -->
+
+                                        <Table
+                                            id="tableId"
+                                            inset="false"
+                                            items="{/animals}"
+                                        >
+                                            <columns>
+                                                <Column width="12em">
+                                                    <ObjectIdentifier
+                                                        text="OTP"
+                                                    />
+                                                </Column>
+                                                <Column>
+                                                    <Text text="Cost" />
+                                                </Column>
+                                                <Column>
+                                                    <Text text="Year" />
+                                                </Column>
+                                                <Column>
+                                                    <ObjectNumber
+                                                        number="Other?"
+                                                    />
+                                                </Column>
+                                            </columns>
+                                            <items>
+                                                <ColumnListItem>
+                                                    <cells>
+                                                        <ObjectIdentifier
+                                                            title="{name}"
+                                                        />
+                                                        <Text
+                                                            text="{favouriteFood}"
+                                                        />
+                                                        <Text text="{color}" />
+                                                        <ObjectNumber
+                                                            number="{numberOfLegs}"
+                                                        />
+                                                    </cells>
+                                                </ColumnListItem>
+                                            </items>
+                                        </Table>
+                                    </commons:content>
+                                </commons:ChartContainerContent>
+                            </commons:content>
+                            <!--                            <commons:customIcons>
+                                <core:Icon
+                                    id="customIcon"
+                                    src="sap-icon://print"
+                                    tooltip="Custom Content Print"
+                                    press="onCustomActionPress"
+                                />
+                            </commons:customIcons> -->
+                            <!--         <commons:toolbar>
+                                <OverflowToolbar id="appToolbar">
+                                    <Button
+                                        id="btnAction1"
+                                        text="CustomAction"
+                                        type="Transparent"
+                                        press="onCustomActionPress"
+                                    />
+                                    <ToolbarSpacer />
+                                    <Button
+                                        id="btnAction2"
+                                        text="CustomAction"
+                                        type="Transparent"
+                                        press="onCustomActionPress"
+                                    />
+                                    <commons:ChartContainerToolbarPlaceholder />
+                                </OverflowToolbar>
+                            </commons:toolbar> -->
+                            <!--                            <commons:dimensionSelectors>
+                                <Select id="idSelector">
+                                    <core:Item
+                                        key="0"
+                                        text="Sales by Country"
+                                    />
+                                </Select>
+                            </commons:dimensionSelectors> -->
+                        </commons:ChartContainer>
                     </uxap:ObjectPageSubSection>
                 </uxap:subSections>
             </uxap:ObjectPageSection>

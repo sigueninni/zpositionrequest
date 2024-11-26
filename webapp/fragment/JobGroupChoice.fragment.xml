@@ -3,7 +3,36 @@
     xmlns="sap.m"
     xmlns:customData="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
 >
-    <Dialog
+    <!-- items="{ path: '/JobGroupSet' }" -->
+    <SelectDialog
+        id="jobGroupSelectDialog"
+        noDataText="{i18n>noJobGroupFound}"
+        title="{i18n>selectJobGroup}"
+        cancel="onCancel"
+        search="onSearchJobGroupDialogPress"
+        confirm="onConfirmJobGroupSelectDialogPress"
+        items="{
+                path : '/JobGroupSet',
+                sorter: {
+                    path: 'JobGroupShort',
+                    descending: true
+                },
+                filters : [
+                    { path : 'JobAreaCode', operator : 'EQ', value1 :'01' }
+                ]
+                }"
+        rememberSelections="false"
+        customData:name="_oJobGroupDialog"
+    >
+        <ObjectListItem title="{JobGroupId}">
+            <attributes>
+                <ObjectAttribute text="{JobGroupStext}" />
+                <ObjectAttribute text="{JobGroupShort}" />
+            </attributes>
+        </ObjectListItem>
+    </SelectDialog>
+
+    <!--     <Dialog
         id="jobGroupDialog"
         title="{i18n>ChooseJobGroup}"
         type="Message"
@@ -22,5 +51,5 @@
             />
         </endButton>
         <content />
-    </Dialog>
+    </Dialog> -->
 </core:FragmentDefinition>
