@@ -1,9 +1,10 @@
 <core:FragmentDefinition
     xmlns:core="sap.ui.core"
     xmlns="sap.m"
+    xmlns:customData="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
 >
     <Dialog
-        id="rejectionDialog"
+        id="typeFlowDialog"
         title="{i18n>ChooseFlowType}"
         type="Message"
     >
@@ -42,8 +43,9 @@
         </beginButton>
         <endButton>
             <Button
+                customData:name="_oTypeFlowDialog"
                 text="{i18n>cancel}"
-                press="onCancelTypeFlowButtonPres"
+                press="onCancel"
             />
         </endButton>
     </Dialog>

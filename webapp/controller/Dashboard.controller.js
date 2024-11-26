@@ -84,13 +84,13 @@ sap.ui.define([
              */
             onCreateButtonPress: function (oEvent) {
 
-                if (!this._oTypeFlowDialog) {
-                    this._oTypeFlowDialog = sap.ui.xmlfragment("lu.uni.zpositionrequest.fragment.TypeFlowChoice", this);
-                    this.getView().addDependent(this._oTypeFlowDialog);
+                if (!this.fragments._oTypeFlowDialog) {
+                    this.fragments._oTypeFlowDialog = sap.ui.xmlfragment("lu.uni.zpositionrequest.fragment.TypeFlowChoice", this);
+                    this.getView().addDependent(this.fragments._oTypeFlowDialog);
                     // forward compact/cozy style into Dialog
-                    this._oTypeFlowDialog.addStyleClass(this.getOwnerComponent().getContentDensityClass());
+                    this.fragments._oTypeFlowDialog.addStyleClass(this.getOwnerComponent().getContentDensityClass());
                 }
-                this._oTypeFlowDialog.open();
+                this.fragments._oTypeFlowDialog.open();
 
             },
 

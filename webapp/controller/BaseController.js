@@ -7,6 +7,7 @@ sap.ui.define([
 
 
     return Controller.extend("lu.uni.zpositionrequest.controller.BaseController", {
+        fragments: {}, //All Fragments here
         /**
          * Convenience method for accessing the router in every controller of the application.
          * @public
@@ -82,6 +83,19 @@ sap.ui.define([
                 this.getView().byId(id).setVisible(isVisible);
             }
         },
+
+
+        onCancel: function (oEvent) {
+            debugger;
+
+            var name = oEvent.getSource().data("name");
+            if (this.fragments[name]) {
+                this.fragments[name].close();
+            }
+            //this._oTypeFlowDialog.close();
+            //this._oTypeFlowDialog.destroy();
+            //delete this._oTypeFlowDialog;
+        }
 
     });
 

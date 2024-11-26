@@ -1,0 +1,26 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    xmlns:customData="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+>
+    <Dialog
+        id="jobGroupDialog"
+        title="{i18n>ChooseJobGroup}"
+        type="Message"
+    >
+        <beginButton>
+            <Button
+                text="{i18n>confirm}"
+                press="onConfirmJobGroupButtonPress"
+            />
+        </beginButton>
+        <endButton>
+            <Button
+                customData:name="_oJobGroupDialog"
+                text="{i18n>cancel}"
+                press="onCancel"
+            />
+        </endButton>
+        <content />
+    </Dialog>
+</core:FragmentDefinition>

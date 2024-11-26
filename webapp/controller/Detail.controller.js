@@ -288,6 +288,22 @@ sap.ui.define([
                 this._getTimeConstraints();
             },
 
+
+            onJobGroupValueHelpPress: function (oEvent) {
+
+                const oView = this.getView();
+                if (!this.fragments._oJobGroupDialog) {
+                    this.fragments._oJobGroupDialog = sap.ui.xmlfragment("lu.uni.zpositionrequest.fragment.JobGroupChoice", this);
+                    this.getView().addDependent(this.fragments._oJobGroupDialog);
+                    // forward compact/cozy style into Dialog
+                    this.fragments._oJobGroupDialog.addStyleClass(this.getOwnerComponent().getContentDensityClass());
+                    //this._oPositionValueHelpDialog.setModel(oView.getModel());
+                    //this._oPositionValueHelpDialog.setModel(oView.getModel("i18n"), "i18n");
+                }
+                this.fragments._oJobGroupDialog.open();
+            },
+
+
             /* =========================================================== */
             /* Internal methods                                     */
             /* =========================================================== */
