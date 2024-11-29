@@ -1,0 +1,35 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    xmlns:customData="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+>
+    <!-- items="{ path: '/JobGroupSet' }" -->
+    <SelectDialog
+        id="jobSelectDialog"
+        noDataText="{i18n>noJobFound}"
+        title="{i18n>selectJob}"
+        cancel="onCancel"
+        search="onSearchJobDialogPress"
+        confirm="onConfirmJobSelectDialogPress"
+        items="{
+                path : '/JobSet',
+                sorter: {
+                    path: 'JobShort',
+                    descending: true
+                }
+                }"
+        rememberSelections="false"
+        customData:name="_oJobDialog"
+    >
+        <!--     ,
+                filters : [
+                    { path : 'JobAreaCode', operator : 'EQ', value1 :'{/JobArea}'  }
+                ] -->
+        <ObjectListItem title="{JobId}">
+            <attributes>
+                <ObjectAttribute text="{JobStext}" />
+                <ObjectAttribute text="{JobShort}" />
+            </attributes>
+        </ObjectListItem>
+    </SelectDialog>
+</core:FragmentDefinition>

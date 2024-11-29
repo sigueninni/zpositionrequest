@@ -16,14 +16,15 @@
                 sorter: {
                     path: 'JobGroupShort',
                     descending: true
-                },
-                filters : [
-                    { path : 'JobAreaCode', operator : 'EQ', value1 :'01' }
-                ]
+                }
                 }"
         rememberSelections="false"
         customData:name="_oJobGroupDialog"
     >
+        <!--     ,
+                filters : [
+                    { path : 'JobAreaCode', operator : 'EQ', value1 :'{/JobArea}'  }
+                ] -->
         <ObjectListItem title="{JobGroupId}">
             <attributes>
                 <ObjectAttribute text="{JobGroupStext}" />

@@ -88,13 +88,15 @@ sap.ui.define([
         onCancel: function (oEvent) {
             debugger;
 
-            var name = oEvent.getSource().data("name");
+            let name = oEvent.getSource().data("name");
             if (this.fragments[name]) {
-                this.fragments[name].close();
+                let _odialog = this.fragments[name];
+                _odialog.close();
+                _odialog.destroy();
+                delete this.fragments[name];
+
             }
-            //this._oTypeFlowDialog.close();
-            //this._oTypeFlowDialog.destroy();
-            //delete this._oTypeFlowDialog;
+
         }
 
     });

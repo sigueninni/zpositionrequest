@@ -153,9 +153,9 @@ sap.ui.define([
                             //sap.ui.core.BusyIndicator.hide();
                         }
 
-                        this._oTypeFlowDialog.close();
-                        this._oTypeFlowDialog.destroy();
-                        delete this._oTypeFlowDialog;
+                        this.fragments._oTypeFlowDialog.close();
+                        this.fragments._oTypeFlowDialog.destroy();
+                        delete this.fragments._oTypeFlowDialog;
 
                     }.bind(this)
                 });

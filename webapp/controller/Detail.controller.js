@@ -295,7 +295,7 @@ sap.ui.define([
             /********************************  Begin Job management ********************************************/
             //TODO signature
             onJobGroupValueHelpPress: function (oEvent) {
-
+                debugger;
                 const oView = this.getView();
                 if (!this.fragments._oJobGroupDialog) {
                     this.fragments._oJobGroupDialog = sap.ui.xmlfragment("lu.uni.zpositionrequest.fragment.JobGroupChoice", this);
@@ -305,7 +305,30 @@ sap.ui.define([
                     //this._oPositionValueHelpDialog.setModel(oView.getModel());
                     //this._oPositionValueHelpDialog.setModel(oView.getModel("i18n"), "i18n");
                 }
+
+                // Apply JobArea filter 
+                this._applyFilterToJobGroupDialog();
+
                 this.fragments._oJobGroupDialog.open();
+            },
+
+            //TODO signature
+            onJobValueHelpPress: function (oEvent) {
+                debugger;
+                const oView = this.getView();
+                if (!this.fragments._oJobDialog) {
+                    this.fragments._oJobDialog = sap.ui.xmlfragment("lu.uni.zpositionrequest.fragment.JobChoice", this);
+                    this.getView().addDependent(this.fragments._oJobDialog);
+                    // forward compact/cozy style into Dialog
+                    this.fragments._oJobDialog.addStyleClass(this.getOwnerComponent().getContentDensityClass());
+                    //this._oPositionValueHelpDialog.setModel(oView.getModel());
+                    //this._oPositionValueHelpDialog.setModel(oView.getModel("i18n"), "i18n");
+                }
+
+                // Apply JobArea filter 
+                this._applyFilterToJobDialog();
+
+                this.fragments._oJobDialog.open();
             },
 
             onConfirmJobGroupSelectDialogPress: function (oEvent) {
@@ -333,6 +356,30 @@ sap.ui.define([
                 }
             },
 
+            onConfirmJobSelectDialogPress: function (oEvent) {
+                var oView = this.getView();
+                var aContexts = oEvent.getParameter("selectedContexts");
+                // get back the selected entry data
+                if (aContexts && aContexts.length) {
+                    // now set the returned values back into the view
+                    oView.byId("job").setValue(
+                        aContexts.map(function (oContext) {
+                            return oContext.getObject().JobId;
+                        }).join(", "));
+
+                    oView.byId("job").setDescription(
+                        aContexts.map(function (oContext) {
+                            return oContext.getObject().JobStext;
+                        }).join(", "));
+                }
+                // clear filters
+                oEvent.getSource().getBinding("items").filter([]);
+                // destroy the dialog
+                if (this.fragments._oJobDialog) {
+                    this.fragments._oJoBDialog.destroy();
+                    delete this.fragments._oJobDialog;
+                }
+            },
             onSearchJobGroupSelectDialogPress: function (oEvent) {
                 var sValue = oEvent.getParameter("value").toString();
                 if (sValue !== "") {
@@ -401,7 +448,6 @@ sap.ui.define([
                     method: "GET",
                     urlParameters: oUrlParam,
                     success: function (oSuccess) {
-                        debugger;
                         oModel.setProperty("/busy", false);
                         let oDateSettings = oSuccess.getDateSettings;
                         let oDatesModel = new JSONModel(oDateSettings);
@@ -415,7 +461,6 @@ sap.ui.define([
                         // oModel.refresh();
                     }.bind(this),
                     error: function (oError) {
-                        debugger;
                         oModel.setProperty("/busy", false);
                         var oFunctError = JSON.parse(oError.responseText);
                         MessageBox.error(oFunctError.error.message.value);
@@ -463,6 +508,36 @@ sap.ui.define([
              */
             _bindCostSimulationChart: function () {
 
+            },
+
+            _applyFilterToJobGroupDialog: function () {
+
+                // Get filter value
+                const bindingContext = this.getView().getBindingContext();
+                const oPositionRequest = bindingContext.getObject();
+
+                const oFilter = new sap.ui.model.Filter("JobAreaCode", sap.ui.model.FilterOperator.EQ, oPositionRequest.JobArea);
+
+                // filter items binding
+                const oBinding = sap.ui.getCore().byId("jobGroupSelectDialog").getBinding("items");
+                if (oBinding) {
+                    oBinding.filter([oFilter]);
+                }
+            },
+
+            _applyFilterToJobDialog: function () {
+
+                // Get filter value
+                const bindingContext = this.getView().getBindingContext();
+                const oPositionRequest = bindingContext.getObject();
+
+                const oFilter = new sap.ui.model.Filter("JobGroupId", sap.ui.model.FilterOperator.EQ, oPositionRequest.JobGroup);
+
+                // filter items binding
+                const oBinding = sap.ui.getCore().byId("jobSelectDialog").getBinding("items");
+                if (oBinding) {
+                    oBinding.filter([oFilter]);
+                }
             }
 
         });
