@@ -293,9 +293,12 @@ sap.ui.define([
             },
 
             /********************************  Begin Job management ********************************************/
-            //TODO signature
+            /**
+               * Event handler for the ValueHelpPress event
+               * @param {sap.ui.base.Event} oEvent t
+               * @public
+               */
             onJobGroupValueHelpPress: function (oEvent) {
-                debugger;
                 const oView = this.getView();
                 if (!this.fragments._oJobGroupDialog) {
                     this.fragments._oJobGroupDialog = sap.ui.xmlfragment("lu.uni.zpositionrequest.fragment.JobGroupChoice", this);
@@ -312,9 +315,12 @@ sap.ui.define([
                 this.fragments._oJobGroupDialog.open();
             },
 
-            //TODO signature
+            /**
+               * Event handler for the ValueHelpPress event
+               * @param {sap.ui.base.Event} oEvent t
+               * @public
+               */
             onJobValueHelpPress: function (oEvent) {
-                debugger;
                 const oView = this.getView();
                 if (!this.fragments._oJobDialog) {
                     this.fragments._oJobDialog = sap.ui.xmlfragment("lu.uni.zpositionrequest.fragment.JobChoice", this);
@@ -330,6 +336,12 @@ sap.ui.define([
 
                 this.fragments._oJobDialog.open();
             },
+
+            /**
+               * Event handler for the select event
+               * @param {sap.ui.base.Event} oEvent t
+               * @public
+               */
 
             onConfirmJobGroupSelectDialogPress: function (oEvent) {
                 var oView = this.getView();
@@ -354,8 +366,19 @@ sap.ui.define([
                     this.fragments._oJobGroupDialog.destroy();
                     delete this.fragments._oJobGroupDialog;
                 }
+
+                //TODO! //Update Long description 
+                const bindingContext = this.getView().getBindingContext();
+                const path = bindingContext.getPath();
+                const object = bindingContext.getModel().getProperty(path);
             },
 
+
+            /**
+             * Event handler for the select event
+             * @param {sap.ui.base.Event} oEvent t
+             * @public
+             */
             onConfirmJobSelectDialogPress: function (oEvent) {
                 var oView = this.getView();
                 var aContexts = oEvent.getParameter("selectedContexts");
@@ -376,9 +399,14 @@ sap.ui.define([
                 oEvent.getSource().getBinding("items").filter([]);
                 // destroy the dialog
                 if (this.fragments._oJobDialog) {
-                    this.fragments._oJoBDialog.destroy();
+                    this.fragments._oJobDialog.destroy();
+                    this.fragments._oJoBDialog = undefined;
+
                     delete this.fragments._oJobDialog;
                 }
+
+                //Get Job Infos
+                this._updateJobInfos();
             },
             onSearchJobGroupSelectDialogPress: function (oEvent) {
                 var sValue = oEvent.getParameter("value").toString();
@@ -390,6 +418,38 @@ sap.ui.define([
                     // clear filters
                     oEvent.getSource().getBinding("items").filter([]);
                 }
+            },
+
+            getJobInfossSuccess: function (oModel, oSuccess) {
+                debugger;
+                oModel.setProperty("/busy", false);
+                let oJobInfos = oSuccess.getJobInfos;
+
+                //Visibility Range
+                const oUiSettingsModel = this.getOwnerComponent().getModel("uiSettings");
+                const isRangeVisible = oUiSettingsModel.getProperty("/rangeVisible");
+                oUiSettingsModel.setProperty("/rangeVisible", oJobInfos.HasRange);
+
+
+                const bindingContext = this.getView().getBindingContext();
+                const path = bindingContext.getPath();
+                const object = bindingContext.getModel().getProperty(path);
+
+                if (oJobInfos.HasRange && object.Range === '')
+                    oModel.setProperty("Range", oJobInfos.DefautRange, this.getView().getBindingContext());
+
+                oModel.setProperty("Persg", oJobInfos.Persg, this.getView().getBindingContext());
+                this.getView().byId("employeeGroup").setDescription(oJobInfos.PersgText);
+                oModel.setProperty("Persk", oJobInfos.Persk, this.getView().getBindingContext());
+                this.getView().byId("employeeSubGroup").setDescription(oJobInfos.PerskText);
+
+/*                 let oDatesModel = new JSONModel(oDateSettings);
+                this.getView().setModel(oDatesModel, 'datesModel');
+
+                //  if (oDateSettings && oDateSettings.EndDate)
+                if (this.byId("startDate").getValue() === '')
+                    
+                oModel.setProperty("EndDate", oDateSettings.EndDate, this.getView().getBindingContext()) */;
             },
             /********************************  End Job management ********************************************/
 
@@ -422,8 +482,6 @@ sap.ui.define([
                  --> Not in the past
                  --> Limit Year + 4 
                  --> Only '01' or '15' of the month */
-                debugger;
-
                 const oModel = this.getView().getModel();
 
                 const bindingContext = this.getView().getBindingContext();
@@ -538,7 +596,52 @@ sap.ui.define([
                 if (oBinding) {
                     oBinding.filter([oFilter]);
                 }
-            }
+            },
+
+            _updateJobInfos: function () {
+
+                debugger;
+                const oModel = this.getView().getModel();
+
+                const bindingContext = this.getView().getBindingContext();
+                const path = bindingContext.getPath();
+                const object = bindingContext.getModel().getProperty(path);
+                let oPositionRequest = bindingContext.getObject(); //getProperty("ReqFlow"); //bindingContext.getObject()
+                let startDate = oPositionRequest.StartDate;
+                let oUrlParam = {
+                    "Job": oPositionRequest.Job,
+                    "Datum": startDate,
+                };
+
+                // if (startDate) { oUrlParam.StartDate = startDate; }
+
+                oModel.setProperty("/busy", true);
+
+                oModel.callFunction("/getJobInfos", {
+                    method: "GET",
+                    urlParameters: oUrlParam,
+                    success: this.getJobInfossSuccess.bind(this, oModel),
+                    error: this.fError.bind(this)
+                    // success: function (oSuccess) {
+                    //     oModel.setProperty("/busy", false);
+                    //     /* let oDateSettings = oSuccess.getDateSettings;
+                    //     let oDatesModel = new JSONModel(oDateSettings);
+                    //     this.getView().setModel(oDatesModel, 'datesModel');
+
+                    //     //  if (oDateSettings && oDateSettings.EndDate)
+                    //     if (this.byId("startDate").getValue() === '')
+                    //         oModel.setProperty("StartDate", oDateSettings.DateInitial, this.getView().getBindingContext());
+                    //     oModel.setProperty("EndDate", oDateSettings.EndDate, this.getView().getBindingContext());
+
+                    //     // oModel.refresh(); */
+                    // }.bind(this),
+                    // error: function (oError) {
+                    //     oModel.setProperty("/busy", false);
+                    //     var oFunctError = JSON.parse(oError.responseText);
+                    //     MessageBox.error(oFunctError.error.message.value);
+                    // }
+                });
+            },
 
         });
     });

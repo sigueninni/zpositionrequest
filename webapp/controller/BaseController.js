@@ -85,6 +85,17 @@ sap.ui.define([
         },
 
 
+
+        /**
+     * Return service Error
+     * @method fError
+     */
+        fError: function () {
+            this.alertErr([this.getText("MSG_ERREUR_SERVICE")]);
+        },
+
+
+
         onCancel: function (oEvent) {
             debugger;
 
@@ -92,7 +103,7 @@ sap.ui.define([
             if (this.fragments[name]) {
                 let _odialog = this.fragments[name];
                 _odialog.close();
-                _odialog.destroy();
+                //   _odialog.destroy();
                 delete this.fragments[name];
 
             }

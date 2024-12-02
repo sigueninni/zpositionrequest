@@ -191,6 +191,7 @@
                                     <Label
                                         text="{i18n>requestType}"
                                         required="true"
+                                        labelFor="positionRequestType"
                                     />
 
                                     <Select
@@ -243,6 +244,7 @@
                                     <Label
                                         text="{i18n>contractType}"
                                         required="true"
+                                        labelFor="contractType"
                                     />
                                     <Select
                                         id="contractType"
@@ -276,6 +278,7 @@
                                     <Label
                                         text="{i18n>startDate}"
                                         required="true"
+                                        labelFor="startDate"
                                     />
                                     <DatePicker
                                         id="startDate"
@@ -289,6 +292,7 @@
                                     <Label
                                         text="{i18n>endDate}"
                                         required="true"
+                                        labelFor="endDate"
                                     />
                                     <DatePicker
                                         id="endDate"
@@ -302,6 +306,7 @@
                                     <Label
                                         text="{i18n>jobArea}"
                                         required="true"
+                                        labelFor="jobArea"
                                     />
                                     <Select
                                         id="jobArea"
@@ -317,7 +322,10 @@
                                         />
                                     </Select>
 
-                                    <Label text="{i18n>jobGroup}" />
+                                    <Label
+                                        text="{i18n>jobGroup}"
+                                        labelFor="jobGroup"
+                                    />
                                     <Input
                                         id="jobGroup"
                                         type="Text"
@@ -331,7 +339,10 @@
                                         required="true"
                                     />
 
-                                    <Label text="{i18n>job}" />
+                                    <Label
+                                        text="{i18n>job}"
+                                        labelFor="job"
+                                    />
                                     <Input
                                         id="job"
                                         type="Text"
@@ -344,12 +355,87 @@
                                         visible="{= ${JobGroup} !== '' }"
                                         required="true"
                                     />
+                                    <core:Title text="" />
+                                    <Label
+                                        text="{i18n>range}"
+                                        required="true"
+                                        labelFor="range"
+                                    />
+                                    <Select
+                                        id="range"
+                                        forceSelection="false"
+                                        items="{/RangeTypeSet}"
+                                        selectedKey="{Range}"
+                                        enabled="{RequestSettings/IsFormEditable}"
+                                        visible="{= ${Job} !== '' &amp;&amp;  ${uiSettings>/rangeVisible}  }"
+                                        change=".onRangeChange"
+                                    >
+                                        <core:Item
+                                            text="{Description}"
+                                            key="{Type}"
+                                        />
+                                    </Select>
 
                                     <!--          maxLength="8" description="{Assignment/PositionName}" showValueHelp="true"
 										valueHelpOnly="true" valueHelpRequest="onPositionValueHelpPress -->
                                 </form:content>
                             </form:SimpleForm>
                         </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+
+                    <!-- Employee Group/SubGroup Form -->
+                    <uxap:ObjectPageSubSection
+                        id="empGroupSubGroupSubSection"
+                        title="{i18n>empGroupSubGroup}"
+                    >
+                        <uxap:blocks>
+                            <form:SimpleForm
+                                layout="ResponsiveGridLayout"
+                                labelSpanXL="4"
+                                labelSpanL="4"
+                                labelSpanM="12"
+                                labelSpanS="12"
+                                adjustLabelSpan="false"
+                                emptySpanXL="0"
+                                emptySpanL="0"
+                                emptySpanM="0"
+                                emptySpanS="0"
+                                columnsXL="2"
+                                columnsL="2"
+                                columnsM="2"
+                                singleContainerFullSize="false"
+                            >
+                                <form:content>
+                                    <core:Title
+                                        text="{i18n>EmployeeGroupSubgroup}"
+                                    />
+                                    <Label
+                                        text="{i18n>employeeGroup}"
+                                        labelFor="employeeGroup"
+                                    />
+                                    <Input
+                                        id="employeeGroup"
+                                        type="Text"
+                                        value="{Persg}"
+                                        editable="false"
+                                        required="false"
+                                    />
+                                    <Label
+                                        text="{i18n>employeeSubGroup}"
+                                        labelFor="employeeSubGroup"
+                                    />
+                                    <Input
+                                        id="employeeSubGroup"
+                                        type="Text"
+                                        value="{Persk}"
+                                        editable="false"
+                                        required="false"
+                                    />
+                                </form:content>
+                            </form:SimpleForm>
+                        </uxap:blocks>
+                        <uxap:moreBlocks />
+                        <uxap:actions />
                     </uxap:ObjectPageSubSection>
 
                     <!-- Assignment Form -->
@@ -376,7 +462,10 @@
                             >
                                 <form:content>
                                     <core:Title text="{i18n>position}" />
-                                    <Label text="{i18n>fundingOrgUnit}" />
+                                    <Label
+                                        text="{i18n>fundingOrgUnit}"
+                                        labelFor="fundingOrgUnit"
+                                    />
                                     <Input
                                         id="fundingOrgUnit"
                                         type="Text"
@@ -493,7 +582,7 @@
                                         <Table
                                             id="tableId"
                                             inset="false"
-                                            items="{/animals}"
+                                            items=""
                                         >
                                             <columns>
                                                 <Column width="12em">

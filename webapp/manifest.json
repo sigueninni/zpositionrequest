@@ -28,6 +28,10 @@
             "commentData_alias": {
                 "uri": "model/localData/comments.json",
                 "type": "JSON"
+            },
+            "uiSettingsData_alias": {
+                "uri": "model/localData/uiSettings.json",
+                "type": "JSON"
             }
         }
     },
@@ -84,6 +88,10 @@
             "commentData": {
                 "type": "sap.ui.model.json.JSONModel",
                 "dataSource": "commentData_alias"
+            },
+            "uiSettings": {
+                "type": "sap.ui.model.json.JSONModel",
+                "dataSource": "uiSettingsData_alias"
             }
         },
         "resources": {
