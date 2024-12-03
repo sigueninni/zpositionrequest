@@ -109,6 +109,14 @@ sap.ui.define([
             }
 
         }
+        ,
+
+        getBindingDetailObject: function () {
+            const oModel = this.getView().getModel();
+            const bindingContext = this.getView().getBindingContext();
+            const path = bindingContext.getPath();
+            return bindingContext.getObject();
+        }
 
     });
 

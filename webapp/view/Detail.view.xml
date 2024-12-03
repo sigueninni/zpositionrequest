@@ -375,9 +375,18 @@
                                             key="{Type}"
                                         />
                                     </Select>
-
-                                    <!--          maxLength="8" description="{Assignment/PositionName}" showValueHelp="true"
-										valueHelpOnly="true" valueHelpRequest="onPositionValueHelpPress -->
+                                    <core:Title
+                                        text="{i18n>CandidateInformations}"
+                                    />
+                                    <Label
+                                        text="{i18n>candidateName}"
+                                        labelFor="candiateName"
+                                    />
+                                    <Input
+                                        id="candidateName"
+                                        type="Text"
+                                        value="{NameCandidate}"
+                                    />
                                 </form:content>
                             </form:SimpleForm>
                         </uxap:blocks>

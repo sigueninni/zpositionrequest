@@ -294,6 +294,33 @@ sap.ui.define([
 
             /********************************  Begin Job management ********************************************/
             /**
+               * Event handler for the select event
+               * @param {sap.ui.base.Event} oEvent JobArea
+               * @public
+               */
+            onJobAreaChange: function (oEvent) {
+                debugger;
+
+                //empty job group/job/range/persk/persg
+                let oPositionRequest = this.getBindingDetailObject();
+                const oModel = this.getView().getModel();
+
+                let job = oPositionRequest.Job;
+                // if (job && job !== '') {
+                oModel.setProperty("JobGroup", "", this.getView().getBindingContext());
+                oModel.setProperty("Job", "", this.getView().getBindingContext());
+                oModel.setProperty("Range", "", this.getView().getBindingContext());
+                oModel.setProperty("Persg", "", this.getView().getBindingContext());
+                oModel.setProperty("Persk", "", this.getView().getBindingContext());
+
+                this.getView().byId("jobGroup").setDescription("");
+                this.getView().byId("job").setDescription("");
+                this.getView().byId("employeeGroup").setDescription("");
+                this.getView().byId("employeeSubGroup").setDescription("");
+                //  }
+
+            },
+            /**
                * Event handler for the ValueHelpPress event
                * @param {sap.ui.base.Event} oEvent t
                * @public
@@ -367,12 +394,23 @@ sap.ui.define([
                     delete this.fragments._oJobGroupDialog;
                 }
 
-                //TODO! //Update Long description 
-                const bindingContext = this.getView().getBindingContext();
-                const path = bindingContext.getPath();
-                const object = bindingContext.getModel().getProperty(path);
-            },
+                //TODO! //Update Long description  
+                debugger;
 
+                //empty job group/job/range/persk/persg
+                let oPositionRequest = this.getBindingDetailObject();
+                const oModel = this.getView().getModel();
+
+                let job = oPositionRequest.Job;
+                // if (job && job !== '') {
+                oModel.setProperty("Job", "", this.getView().getBindingContext());
+                oModel.setProperty("Range", "", this.getView().getBindingContext());
+                oModel.setProperty("Persg", "", this.getView().getBindingContext());
+                oModel.setProperty("Persk", "", this.getView().getBindingContext());
+                this.getView().byId("job").setDescription("");
+                this.getView().byId("employeeGroup").setDescription("");
+                this.getView().byId("employeeSubGroup").setDescription("");
+            },
 
             /**
              * Event handler for the select event
