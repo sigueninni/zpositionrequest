@@ -183,6 +183,7 @@
                                 columnsXL="2"
                                 columnsL="2"
                                 columnsM="2"
+                                editable="true"
                             >
                                 <form:content>
                                     <core:Title text="{i18n>requestFlowType}" />
@@ -355,7 +356,6 @@
                                         visible="{= ${JobGroup} !== '' }"
                                         required="true"
                                     />
-                                    <core:Title text="" />
                                     <Label
                                         text="{i18n>range}"
                                         required="true"
@@ -413,6 +413,7 @@
                                 columnsL="2"
                                 columnsM="2"
                                 singleContainerFullSize="false"
+                                editable="true"
                             >
                                 <form:content>
                                     <core:Title
@@ -468,42 +469,23 @@
                                 columnsL="2"
                                 columnsM="2"
                                 singleContainerFullSize="false"
+                                editable="true"
                             >
                                 <form:content>
-                                    <core:Title text="{i18n>position}" />
                                     <Label
-                                        text="{i18n>fundingOrgUnit}"
-                                        labelFor="fundingOrgUnit"
+                                        text="{i18n>assignedOrgUnit}"
+                                        labelFor="assignedOrgUnit"
                                     />
                                     <Input
-                                        id="fundingOrgUnit"
+                                        id="assignedOrgUnit"
                                         type="Text"
-                                        value="{Assignment/OrgUnitName}"
+                                        value="{Orgeh}"
                                         showValueHelp="true"
                                         valueHelpOnly="true"
                                         valueHelpRequest="onOrgUnitValueHelpPress"
                                         editable="{RequestSettings/IsFormEditable}"
                                         required="true"
                                     />
-                                    <Label text="{i18n>positionId}" />
-                                    <Input
-                                        id="positionId"
-                                        type="Number"
-                                        value="{ path: 'Assignment/PositionId' }"
-                                        visible="{RequestSettings/IsAdminDataVisible}"
-                                        editable="{RequestSettings/IsPositionDataEditable}"
-                                        maxLength="8"
-                                        description="{Assignment/PositionName}"
-                                        showValueHelp="true"
-                                        valueHelpOnly="true"
-                                        valueHelpRequest="onPositionValueHelpPress"
-                                    />
-
-                                    <!--<Label text="{i18n>personnelSubarea}"/>-->
-                                    <!--<Select id="personnelSubarea" forceSelection="false" items="{/PersonnelSubareaSet}" selectedKey="{Assignment/PersonnelSubarea}"-->
-                                    <!--	enabled="{RequestSettings/IsFormEditable}">-->
-                                    <!--	<core:Item id="personnelSubareaItem" text="{PersonnelSubareaName}" key="{PersonnelSubareaKey}"/>-->
-                                    <!--</Select>-->
                                 </form:content>
                             </form:SimpleForm>
                         </uxap:blocks>

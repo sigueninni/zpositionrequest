@@ -1,0 +1,19 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    xmlns:customData="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+>
+    <SelectDialog
+        id="orgUnitSelectDialog"
+        noDataText="{i18n>noOrgUnitFound}"
+        title="{i18n>selectOrgUnit}"
+        search="onSearchOrgUnitSelectDialog"
+        confirm="onConfirmOrgUnitSelectDialogPress"
+        items="{ path: '/OrgUnitSet' }"
+        rememberSelections="false"
+    >
+        <ObjectListItem title="{OrgUnitName}">
+            <ObjectAttribute text="{ManagedBy}" />
+        </ObjectListItem>
+    </SelectDialog>
+</core:FragmentDefinition>

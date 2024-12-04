@@ -7,10 +7,12 @@ sap.ui.define([
     "sap/viz/ui5/data/FlattenedDataset",
     "sap/viz/ui5/controls/common/feeds/FeedItem",
     "sap/m/MessageBox",
-    "sap/m/MessageToast"
+    "sap/m/MessageToast",
+    "sap/ui/model/Filter",
+    "sap/ui/model/FilterOperator",
 
 ],
-    function (BaseController, JSONModel, formatter, formatMessage, ValueState, FlattenedDataset, FeedItem, MessageBox, MessageToast) {
+    function (BaseController, JSONModel, formatter, formatMessage, ValueState, FlattenedDataset, FeedItem, MessageBox, MessageToast, Filter, FilterOperator) {
         "use strict";
 
         return BaseController.extend("lu.uni.zpositionrequest.controller.Detail", {
@@ -292,7 +294,9 @@ sap.ui.define([
                 this._getTimeConstraints();
             },
 
-            /********************************  Begin Job management ********************************************/
+            /*************************************************************************************************/
+            /********************************  Begin Job management ******************************************/
+            /*************************************************************************************************/
             /**
                * Event handler for the select event
                * @param {sap.ui.base.Event} oEvent JobArea
@@ -344,7 +348,7 @@ sap.ui.define([
 
             /**
                * Event handler for the ValueHelpPress event
-               * @param {sap.ui.base.Event} oEvent t
+               * @param {sap.ui.base.Event} oEvent for Job
                * @public
                */
             onJobValueHelpPress: function (oEvent) {
@@ -489,7 +493,54 @@ sap.ui.define([
                     
                 oModel.setProperty("EndDate", oDateSettings.EndDate, this.getView().getBindingContext()) */;
             },
+
+            /*************************************************************************************************/
             /********************************  End Job management ********************************************/
+            /*************************************************************************************************/
+
+
+            /**********************************************************************************************************/
+            /********************************  Begin Assignment management ********************************************/
+            /**********************************************************************************************************/
+
+
+            /**
+             * Event handler for the ValueHelpPress event
+             * @param {sap.ui.base.Event} oEvent for OrgUnit
+             * @public
+             */
+            onOrgUnitValueHelpPress: function (oEvent) {
+                const oView = this.getView();
+                if (!this.fragments._oOrgUnitDialog) {
+                    this.fragments._oOrgUnitDialog = sap.ui.xmlfragment("lu.uni.zpositionrequest.fragment.OrgUnitChoice", this);
+                    this.getView().addDependent(this.fragments._oOrgUnitDialog);
+                    // forward compact/cozy style into Dialog
+                    this.fragments._oOrgUnitDialog.addStyleClass(this.getOwnerComponent().getContentDensityClass());
+                    //this._oPositionValueHelpDialog.setModel(oView.getModel());
+                    //this._oPositionValueHelpDialog.setModel(oView.getModel("i18n"), "i18n");
+                }
+
+
+                this.fragments._oOrgUnitDialog.open();
+            },
+
+
+            onSearchOrgUnitSelectDialog: function (oEvent) {
+                debugger;
+                const sValue = oEvent.getParameter("value").toString();
+                if (sValue !== "") {
+                    let oFilter = new Filter("ManagedBy", sap.ui.model.FilterOperator.Contains, sValue);
+                    let oBinding = oEvent.getSource().getBinding("items");
+                    oBinding.filter([oFilter]);
+                } else {
+                    // clear filters
+                    oEvent.getSource().getBinding("items").filter([]);
+                }
+            },
+            /**********************************************************************************************************/
+            /********************************  End Assignment management ********************************************/
+            /**********************************************************************************************************/
+
 
             /* =========================================================== */
             /* Internal methods                                     */
