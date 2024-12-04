@@ -395,7 +395,7 @@
                     <!-- Employee Group/SubGroup Form -->
                     <uxap:ObjectPageSubSection
                         id="empGroupSubGroupSubSection"
-                        title="{i18n>empGroupSubGroup}"
+                        title="{i18n>empGroupSubGroupAndWorkingTime}"
                     >
                         <uxap:blocks>
                             <form:SimpleForm
@@ -438,6 +438,36 @@
                                         id="employeeSubGroup"
                                         type="Text"
                                         value="{Persk}"
+                                        editable="false"
+                                        required="false"
+                                    />
+                                    <core:Title text="{i18n>workingTime}" />
+                                    <Label
+                                        text="{i18n>posAllocPercentage}"
+                                        labelFor="posAllocPercentage"
+                                    />
+                                    <Input
+                                        id="posAllocPercentage"
+                                        type="Number"
+                                        description="%"
+                                        value="{
+                                        value:'',
+                                            type : 'sap.ui.model.type.Integer',
+                                            constraints : {
+                                                minimum: '0',
+                                                maximum: '100'
+                                        }
+                                        }"
+                                        editable="true"
+                                        required="true"
+                                    />
+                                    <Label
+                                        text="{i18n>workingTime}"
+                                        labelFor="workingTime"
+                                    />
+                                    <Input
+                                        id="workingTime"
+                                        type="Text"
                                         editable="false"
                                         required="false"
                                     />

@@ -537,6 +537,33 @@ sap.ui.define([
                     oEvent.getSource().getBinding("items").filter([]);
                 }
             },
+
+
+
+            onConfirmOrgUnitSelectDialogPress: function (oEvent) {
+                debugger;
+                const oView = this.getView();
+                const aContexts = oEvent.getParameter("selectedContexts");
+                // get back the selected entry data
+                if (aContexts && aContexts.length) {
+                    let sOrgUnitName = aContexts.map(function (oContext) {
+                        return oContext.getObject().OrgUnitName;
+                    }).join(", ");
+                    let sOrgUnitId = aContexts.map(function (oContext) {
+                        return oContext.getObject().OrgUnitId;
+                    }).join(", ");
+                    // now set the returned values back into the view
+                    oView.byId("assignedOrgUnit").setDescription(sOrgUnitName);
+                    oView.byId("assignedOrgUnit").setValue(sOrgUnitId);
+                }
+                // clear filters
+                oEvent.getSource().getBinding("items").filter([]);
+                // destroy the dialog
+                if (this.fragments._oOrgUnitDialog) {
+                    this.fragments._oOrgUnitDialog.destroy();
+                    delete this.fragments._oOrgUnitDialog;
+                }
+            },
             /**********************************************************************************************************/
             /********************************  End Assignment management ********************************************/
             /**********************************************************************************************************/
