@@ -100,17 +100,23 @@ sap.ui.define([], function () {
         },
         formatTime: function (oTime) {
             if (oTime) {
-                var oDate = new Date(oTime.ms);
-                var sTimeinMilliseconds = oDate.getTime();
-                var oTimeFormat = sap.ui.core.format.DateFormat.getTimeInstance({
+                const oDate = new Date(oTime.ms);
+                const sTimeinMilliseconds = oDate.getTime();
+                let oTimeFormat = sap.ui.core.format.DateFormat.getTimeInstance({
                     pattern: "HH:mm"
                 });
-                var TZOffsetMs = new Date(0).getTimezoneOffset() * 60 * 1000;
-                var sTime = oTimeFormat.format(new Date(sTimeinMilliseconds + TZOffsetMs));
+                let TZOffsetMs = new Date(0).getTimezoneOffset() * 60 * 1000;
+                let sTime = oTimeFormat.format(new Date(sTimeinMilliseconds + TZOffsetMs));
                 return sTime;
             }
             return null;
         },
+
+        calculateNbHoursYear: function (oPercentage) {
+            debugger;
+            return (2080 * oPercentage / 100)
+
+        }
 
 
     };

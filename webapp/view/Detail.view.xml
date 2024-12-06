@@ -451,8 +451,8 @@
                                         type="Number"
                                         description="%"
                                         value="{
-                                        value:'',
-                                            type : 'sap.ui.model.type.Integer',
+                                        path:'PosAllocPercent',
+                                            type : 'sap.ui.model.type.Float',
                                             constraints : {
                                                 minimum: '0',
                                                 maximum: '100'
@@ -465,9 +465,14 @@
                                         text="{i18n>workingTime}"
                                         labelFor="workingTime"
                                     />
+
                                     <Input
                                         id="workingTime"
-                                        type="Text"
+                                        value="{
+                                            path: 'PosAllocPercent',
+                                            formatter: '.formatter.calculateNbHoursYear'
+                                        }"
+                                        type="Number"
                                         editable="false"
                                         required="false"
                                     />
