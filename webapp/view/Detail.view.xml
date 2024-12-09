@@ -445,6 +445,7 @@
                                     <Label
                                         text="{i18n>posAllocPercentage}"
                                         labelFor="posAllocPercentage"
+                                        required="true"
                                     />
                                     <Input
                                         id="posAllocPercentage"
@@ -481,6 +482,119 @@
                         </uxap:blocks>
                         <uxap:moreBlocks />
                         <uxap:actions />
+                    </uxap:ObjectPageSubSection>
+
+                    <!-- Position Charatertistic Form -->
+                    <uxap:ObjectPageSubSection
+                        id="positionCharacteristicSubSection"
+                        title="{i18n>positionCharacteristic}"
+                    >
+                        <uxap:blocks>
+                            <form:SimpleForm
+                                layout="ResponsiveGridLayout"
+                                labelSpanXL="4"
+                                labelSpanL="4"
+                                labelSpanM="12"
+                                labelSpanS="12"
+                                adjustLabelSpan="false"
+                                emptySpanXL="0"
+                                emptySpanL="0"
+                                emptySpanM="0"
+                                emptySpanS="0"
+                                columnsXL="2"
+                                columnsL="2"
+                                columnsM="2"
+                                singleContainerFullSize="false"
+                                editable="true"
+                            >
+                                <core:Title text="" />
+                                <Label
+                                    text="{i18n>justifCDI}"
+                                    labelFor="justifCDI"
+                                />
+                                <Input
+                                    id="justifCDI"
+                                    type="Text"
+                                    value="{Justifcdi}"
+                                    showValueHelp="true"
+                                    valueHelpOnly="true"
+                                    valueHelpRequest="onJustifCDIValueHelpPress"
+                                    editable="{RequestSettings/IsFormEditable}"
+                                    required="true"
+                                />
+
+                                <Label
+                                    text="{i18n>justifCDD}"
+                                    required="true"
+                                    labelFor="justifCDD"
+                                />
+
+                                <Select
+                                    id="justifCDD"
+                                    forceSelection="false"
+                                    items="{/JustifcddTypeSet}"
+                                    selectedKey="{Poscharac}"
+                                    enabled="{RequestSettings/IsFormEditable}"
+                                    change=".onjustifCDDTypeChange"
+                                >
+                                    <core:Item
+                                        text="{Description}"
+                                        key="{Type}"
+                                    />
+                                </Select>
+                                <Label text="" />
+                                <CheckBox
+                                    text="{i18n>externallyFunded}"
+                                    selected="{ExternallyFunded}"
+                                />
+
+                                <Label
+                                    text="{i18n>workCapacityApproved}"
+                                    labelFor="workCapacityApproved"
+                                />
+                                <Input
+                                    id="workCapacityApproved"
+                                    type="Number"
+                                    description="%"
+                                    value="{
+                                        path:'Workcappapp',
+                                            type : 'sap.ui.model.type.Float',
+                                            constraints : {
+                                                minimum: '0',
+                                                maximum: '100'
+                                        }
+                                        }"
+                                    editable="true"
+                                />
+
+                                <core:Title text="" />
+
+                                <Label
+                                    text="{i18n>relatedPernr}"
+                                    labelFor="relatedPernr"
+                                />
+                                <Input
+                                    id="relatedPernr"
+                                    type="Text"
+                                    value="{RelatedPernr}"
+                                    showValueHelp="true"
+                                    valueHelpOnly="true"
+                                    valueHelpRequest="onRelatedPernrValueHelpPress"
+                                    editable="{RequestSettings/IsFormEditable}"
+                                />
+
+                                <Label
+                                    text="{i18n>replacedpos}"
+                                    labelFor="Replacedpos"
+                                />
+                                <Input
+                                    id="replacedpos"
+                                    type="Text"
+                                    value="{Replacedpos}"
+                                    editable="false"
+                                />
+                            </form:SimpleForm>
+                        </uxap:blocks>
                     </uxap:ObjectPageSubSection>
 
                     <!-- Assignment Form -->
@@ -524,8 +638,38 @@
                                 </form:content>
                             </form:SimpleForm>
                         </uxap:blocks>
-                        <uxap:moreBlocks />
-                        <uxap:actions />
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+
+            <!-- FC Note Section -->
+            <uxap:ObjectPageSection
+                id="fcNoteSection"
+                title="FC notes"
+            >
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection id="fcNotesSubSection">
+                        <VBox>
+                            <FeedInput
+                                post="onFeedInputPosted"
+                                showIcon="false"
+                                visible="{RequestSettings/IsCommentsEnabled}"
+                            />
+                            <!-- items="{ path: 'Comments', sorter: { path: 'CreatedOn' } }" TODO -->
+                            <List
+                                showSeparators="Inner"
+                                mode="Delete"
+                                delete="onDeleteFeedItemBtnPressed"
+                            >
+                                <FeedListItem
+                                    sender="{CreatorName}"
+                                    showIcon="false"
+                                    senderActive="false"
+                                    timestamp="{ path: 'CreatedOn', type: 'sap.ui.model.type.Date', formatOptions: { pattern: 'dd MMM yyyy', UTC: true } } { path: 'CreatedAt', formatter: '.formatter.formatTime'}"
+                                    text="{Note}"
+                                />
+                            </List>
+                        </VBox>
                     </uxap:ObjectPageSubSection>
                 </uxap:subSections>
             </uxap:ObjectPageSection>
@@ -561,6 +705,7 @@
                     </uxap:ObjectPageSubSection>
                 </uxap:subSections>
             </uxap:ObjectPageSection>
+
             <!-- Cost Simulation Section -->
             <uxap:ObjectPageSection
                 id="costSimulationSection"
