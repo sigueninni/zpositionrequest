@@ -1,0 +1,30 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    xmlns:customData="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+>
+    <SelectDialog
+        id="justifCDISelectDialog"
+        noDataText="{i18n>noJUstifCDIFound}"
+        title="{i18n>selectJustifCDI}"
+        cancel="onCancel"
+        search="onSearchJustifCDIDialogPress"
+        confirm="onConfirmJustifCDISelectDialogPress"
+        items="{
+                path : '/JustifcdiSet',
+                sorter: {
+                    path: 'Code',
+                    descending: true
+                }
+                }"
+        rememberSelections="false"
+        customData:name="_oJustifCDIDialog"
+    >
+        <ObjectListItem title="{Code}">
+            <attributes>
+                <ObjectAttribute text="{Description}" />
+                <ObjectAttribute text="{Begda}-{Endda}" />
+            </attributes>
+        </ObjectListItem>
+    </SelectDialog>
+</core:FragmentDefinition>

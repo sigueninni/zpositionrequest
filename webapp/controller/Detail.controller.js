@@ -568,6 +568,45 @@ sap.ui.define([
             /********************************  End Assignment management ********************************************/
             /**********************************************************************************************************/
 
+            /**********************************************************************************************************/
+            /********************************  Begin PosCharac management ********************************************/
+            /**********************************************************************************************************/
+
+            /**
+              * Event handler for the ValueHelpPress event
+              * @param {sap.ui.base.Event} oEvent t
+              * @public
+              */
+            onJustifCDIValueHelpPress: function (oEvent) {
+                const oView = this.getView();
+                if (!this.fragments._oJustifCDIDialog) {
+                    this.fragments._oJustifCDIDialog = sap.ui.xmlfragment("lu.uni.zpositionrequest.fragment.JustifCDIChoice", this);
+                    this.getView().addDependent(this.fragments._oJustifCDIDialog);
+                    // forward compact/cozy style into Dialog
+                    this.fragments._oJustifCDIDialog.addStyleClass(this.getOwnerComponent().getContentDensityClass());
+                    //this._oPositionValueHelpDialog.setModel(oView.getModel());
+                    //this._oPositionValueHelpDialog.setModel(oView.getModel("i18n"), "i18n");
+                }
+
+                this.fragments._oJustifCDIDialog.open();
+            },
+
+
+
+            onSearchJustifCDISelectDialogPress: function (oEvent) {
+                var sValue = oEvent.getParameter("value").toString();
+                if (sValue !== "") {
+                    var oFilter = new Filter("Code", sap.ui.model.FilterOperator.Contains, sValue);
+                    var oBinding = oEvent.getSource().getBinding("items");
+                    oBinding.filter([oFilter]);
+                } else {
+                    // clear filters
+                    oEvent.getSource().getBinding("items").filter([]);
+                }
+            },
+            /**********************************************************************************************************/
+            /********************************  End PosCharac management ********************************************/
+            /**********************************************************************************************************/
 
             /* =========================================================== */
             /* Internal methods                                     */
