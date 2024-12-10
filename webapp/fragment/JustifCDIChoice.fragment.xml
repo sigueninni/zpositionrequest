@@ -23,7 +23,15 @@
         <ObjectListItem title="{Code}">
             <attributes>
                 <ObjectAttribute text="{Description}" />
-                <ObjectAttribute text="{Begda}-{Endda}" />
+                <ObjectAttribute
+                    text="{
+                    parts: [
+                        {path: 'Begda', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}},
+                        {path: 'Endda', type: 'sap.ui.model.type.Date', formatOptions: {pattern: 'dd/MM/yyyy'}}
+                    ],
+                    formatter: '.joinDatesJustifCDI'
+                }"
+                />
             </attributes>
         </ObjectListItem>
     </SelectDialog>

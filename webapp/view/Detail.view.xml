@@ -461,6 +461,7 @@
                                         }"
                                         editable="true"
                                         required="true"
+                                        change=".onPosAllocPercentageChange"
                                     />
                                     <Label
                                         text="{i18n>workingTime}"
@@ -520,6 +521,7 @@
                                     valueHelpOnly="true"
                                     valueHelpRequest="onJustifCDIValueHelpPress"
                                     editable="{RequestSettings/IsFormEditable}"
+                                    visible="{uiSettings>/justifCDIVisible}"
                                     required="true"
                                 />
 
@@ -535,6 +537,7 @@
                                     items="{/JustifcddTypeSet}"
                                     selectedKey="{Poscharac}"
                                     enabled="{RequestSettings/IsFormEditable}"
+                                    visible="{uiSettings>/justifCDDVisible}"
                                     change=".onjustifCDDTypeChange"
                                 >
                                     <core:Item

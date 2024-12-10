@@ -282,7 +282,22 @@ sap.ui.define([
             * @public
             */
             onContractTypeChange: function (oEvent) {
+                debugger;
+
+                const sFullId = oEvent.getSource().getId();
+                const sLocalId = sFullId.split("--").pop();
+
                 this._getTimeConstraints();
+                this._updateUiSettings(sLocalId, oEvent.getSource().getSelectedKey());
+
+                let oPositionRequest = this.getBindingDetailObject();
+                const oModel = this.getView().getModel();
+
+                oModel.setProperty("Poscharac", "", this.getView().getBindingContext());
+                oModel.setProperty("Justifcdi", "", this.getView().getBindingContext());
+                this.getView().byId("justifCDI").setDescription("");
+
+
             },
 
             /**
@@ -293,6 +308,30 @@ sap.ui.define([
             onDurationMonthsChange: function (oEvent) {
                 this._getTimeConstraints();
             },
+
+            /**
+              * Event handler for the onChange select : PosAllocPercentage
+              * @param {sap.ui.base.Event} oEvent the button OnChange event
+              * @public
+              */
+            onPosAllocPercentageChange: function (oEvent) {
+                debugger;
+                const view = this.getView();
+                const workCapacityInput = view.byId("workCapacityApproved");
+                const posAllocInput = oEvent.getSource();
+
+                // get Values
+                const posAllocValue = posAllocInput.getValue();
+                const workCapacityValue = workCapacityInput.getValue();
+
+                // Only if workCapacityValue = 0 and createMode 
+                //TODO
+                if (workCapacityValue === "0" && posAllocValue) {
+                    workCapacityInput.setValue(posAllocValue);
+                }
+            },
+
+
 
             /*************************************************************************************************/
             /********************************  Begin Job management ******************************************/
@@ -588,6 +627,9 @@ sap.ui.define([
                     //this._oPositionValueHelpDialog.setModel(oView.getModel("i18n"), "i18n");
                 }
 
+                // Apply dats filter
+                this._applyFilterDatToJustifCDIDialog();
+
                 this.fragments._oJustifCDIDialog.open();
             },
 
@@ -602,6 +644,32 @@ sap.ui.define([
                 } else {
                     // clear filters
                     oEvent.getSource().getBinding("items").filter([]);
+                }
+            },
+
+
+            onConfirmJustifCDISelectDialogPress: function (oEvent) {
+
+                const oView = this.getView();
+                const aContexts = oEvent.getParameter("selectedContexts");
+                // get back the selected entry data
+                if (aContexts && aContexts.length) {
+                    let sDescription = aContexts.map(function (oContext) {
+                        return oContext.getObject().Description;
+                    }).join(", ");
+                    let sCode = aContexts.map(function (oContext) {
+                        return oContext.getObject().Code;
+                    }).join(", ");
+                    // now set the returned values back into the view
+                    oView.byId("justifCDI").setDescription(sDescription);
+                    oView.byId("justifCDI").setValue(sCode);
+                }
+                // clear filters
+                oEvent.getSource().getBinding("items").filter([]);
+                // destroy the dialog
+                if (this.fragments._oJustifCDIDialog) {
+                    this.fragments._oJustifCDIDialog.destroy();
+                    delete this.fragments._oJustifCDIDialog;
                 }
             },
             /**********************************************************************************************************/
@@ -753,6 +821,23 @@ sap.ui.define([
                 }
             },
 
+
+            _applyFilterDatToJustifCDIDialog: function () {
+
+                // Get filter value
+                const bindingContext = this.getView().getBindingContext();
+                const oPositionRequest = bindingContext.getObject();
+
+                const oFilter = new sap.ui.model.Filter("Begda", sap.ui.model.FilterOperator.EQ, oPositionRequest.StartDate);
+
+                // filter items binding
+                const oBinding = sap.ui.getCore().byId("justifCDISelectDialog").getBinding("items");
+                if (oBinding) {
+                    oBinding.filter([oFilter]);
+                }
+            },
+
+
             _updateJobInfos: function () {
 
                 debugger;
@@ -797,6 +882,26 @@ sap.ui.define([
                     // }
                 });
             },
+
+            _updateUiSettings(oId, oValue) {
+
+                const oUiSettingsModel = this.getOwnerComponent().getModel("uiSettings");
+
+                if (oId === "contractType") {
+                    if (oValue === 'CDI') {
+                        oUiSettingsModel.setProperty("/justifCDIVisible", true);
+                        oUiSettingsModel.setProperty("/justifCDDVisible", false);
+                    }
+
+                    if (oValue === 'CDD') {
+                        oUiSettingsModel.setProperty("/justifCDIVisible", false);
+                        oUiSettingsModel.setProperty("/justifCDDVisible", true);
+                    }
+                }
+
+
+
+            }
 
         });
     });

@@ -116,7 +116,21 @@ sap.ui.define([], function () {
             debugger;
             return (2080 * oPercentage / 100)
 
+        },
+
+        joinDatesJustifCDI: function (begda, endda) {
+            if (!begda && !endda) {
+                return ""; // Si aucune date n'est fournie
+            }
+            if (!begda) {
+                return endda; // Si seule la fin est présente
+            }
+            if (!endda) {
+                return begda; // Si seul le début est présent
+            }
+            return `${begda} - ${endda}`; // Concatène avec un séparateur
         }
+
 
 
     };
