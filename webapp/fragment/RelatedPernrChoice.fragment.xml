@@ -5,12 +5,12 @@
 >
     <!-- items="{ path: '/JobGroupSet' }" -->
     <SelectDialog
-        id="pernrSelectDialog"
+        id="relatedPernrSelectDialog"
         noDataText="{i18n>noPersonFound}"
         title="{i18n>selectPerson}"
         cancel="onCancel"
-        search="onSearchPersonDialogPress"
-        confirm="onConfirmPersonSelectDialogPress"
+        search="onSearchRelatedPernrSelectDialogPress"
+        confirm="onConfirmRelatedPernrSelectDialogPress"
         items="{
                 path : '/PersonSet',
                 sorter: {
@@ -19,15 +19,15 @@
                 }
                 }"
         rememberSelections="false"
-        customData:name="_oPernrDialog"
+        customData:name="_oRelatedPernrDialog"
     >
         <!--     ,
                 filters : [
                     { path : 'JobAreaCode', operator : 'EQ', value1 :'{/JobArea}'  }
                 ] -->
-        <ObjectListItem title="{Pernr}">
+        <ObjectListItem title="{Pernr}-{Ename}">
             <attributes>
-                <ObjectAttribute text="{Ename}" />
+                <ObjectAttribute text="{AffpositionText}" />
                 <ObjectAttribute text="{Stat2Text}" />
             </attributes>
         </ObjectListItem>

@@ -695,14 +695,14 @@ sap.ui.define([
               * @param {sap.ui.base.Event} oEvent t
               * @public
               */
-            onPernrValueHelpPress: function (oEvent) {
+            onReplacedPernrValueHelpPress: function (oEvent) {
                 debugger;
                 const oView = this.getView();
-                if (!this.fragments._oPernrDialog) {
-                    this.fragments._oPernrDialog = sap.ui.xmlfragment("lu.uni.zpositionrequest.fragment.PernrChoice", this);
-                    this.getView().addDependent(this.fragments._oPernrDialog);
+                if (!this.fragments._oReplacedPernrDialog) {
+                    this.fragments._oReplacedPernrDialog = sap.ui.xmlfragment("lu.uni.zpositionrequest.fragment.ReplacedPernrChoice", this);
+                    this.getView().addDependent(this.fragments._oReplacedPernrDialog);
                     // forward compact/cozy style into Dialog
-                    this.fragments._oPernrDialog.addStyleClass(this.getOwnerComponent().getContentDensityClass());
+                    this.fragments._oReplacedPernrDialog.addStyleClass(this.getOwnerComponent().getContentDensityClass());
                 }
 
                 // Apply type of pernr search filter
@@ -710,15 +710,52 @@ sap.ui.define([
                 const sLocalId = sFullId.split("--").pop();
                 this._applyFilterPernrDialog(sLocalId);
 
-                this.fragments._oPernrDialog.open();
+                this.fragments._oReplacedPernrDialog.open();
             },
 
-            onSearchPernrSelectDialogPress: function (oEvent) {
-                var sValue = oEvent.getParameter("value").toString();
+
+            /**
+             * Event handler for the ValueHelpPress event
+             * @param {sap.ui.base.Event} oEvent t
+             * @public
+             */
+            onRelatedPernrValueHelpPress: function (oEvent) {
+                debugger;
+                const oView = this.getView();
+                if (!this.fragments._oRelatedPernrDialog) {
+                    this.fragments._oRelatedPernrDialog = sap.ui.xmlfragment("lu.uni.zpositionrequest.fragment.RelatedPernrChoice", this);
+                    this.getView().addDependent(this.fragments._oRelatedPernrDialog);
+                    // forward compact/cozy style into Dialog
+                    this.fragments._oRelatedPernrDialog.addStyleClass(this.getOwnerComponent().getContentDensityClass());
+                }
+
+                // Apply type of pernr search filter
+                const sFullId = oEvent.getSource().getId();
+                const sLocalId = sFullId.split("--").pop();
+                this._applyFilterPernrDialog(sLocalId);
+
+                this.fragments._oRelatedPernrDialog.open();
+            },
+            onSearchRelatedPernrSelectDialogPress: function (oEvent) {
+                //TODO -> add filter type Person
+                const sValue = oEvent.getParameter("value").toString();
                 if (sValue !== "") {
-                    var oFilter = new Filter("Code", sap.ui.model.FilterOperator.Contains, sValue);
-                    var oBinding = oEvent.getSource().getBinding("items");
-                    oBinding.filter([oFilter]);
+                    const oFilterEname = new Filter("Ename", sap.ui.model.FilterOperator.Contains, sValue);
+
+
+                    const oPositionRequest = this.getBindingDetailObject();
+                    const oFilterDate = new sap.ui.model.Filter("Begda", sap.ui.model.FilterOperator.EQ, oPositionRequest.StartDate);
+                    const oFilterType = new sap.ui.model.Filter("Type", sap.ui.model.FilterOperator.EQ, "RelatedPernr");
+
+                    const oCombinedFilter = new sap.ui.model.Filter({
+                        filters: [oFilterDate, oFilterEname, oFilterType],
+                        and: true
+                    });
+
+
+
+                    let oBinding = oEvent.getSource().getBinding("items");
+                    oBinding.filter([oCombinedFilter]);
                 } else {
                     // clear filters
                     oEvent.getSource().getBinding("items").filter([]);
@@ -726,28 +763,80 @@ sap.ui.define([
             },
 
 
-            onConfirmPernrSelectDialogPress: function (oEvent) {
+            onSearchReplacedPernrSelectDialogPress: function (oEvent) {
+                //TODO -> add filter type Person
+                const sValue = oEvent.getParameter("value").toString();
+                if (sValue !== "") {
+                    const oFilterEname = new Filter("Ename", sap.ui.model.FilterOperator.Contains, sValue);
+
+
+                    const oPositionRequest = this.getBindingDetailObject();
+                    const oFilterDate = new sap.ui.model.Filter("Begda", sap.ui.model.FilterOperator.EQ, oPositionRequest.StartDate);
+                    const oFilterType = new sap.ui.model.Filter("Type", sap.ui.model.FilterOperator.EQ, "ReplacedPernr");
+
+                    const oCombinedFilter = new sap.ui.model.Filter({
+                        filters: [oFilterDate, oFilterEname, oFilterType],
+                        and: true
+                    });
+
+
+
+                    let oBinding = oEvent.getSource().getBinding("items");
+                    oBinding.filter([oCombinedFilter]);
+                } else {
+                    // clear filters
+                    oEvent.getSource().getBinding("items").filter([]);
+                }
+            },
+
+
+            onConfirmRelatedPernrSelectDialogPress: function (oEvent) {
 
                 const oView = this.getView();
                 const aContexts = oEvent.getParameter("selectedContexts");
                 // get back the selected entry data
                 if (aContexts && aContexts.length) {
                     let sDescription = aContexts.map(function (oContext) {
-                        return oContext.getObject().Description;
+                        return oContext.getObject().Ename;
                     }).join(", ");
                     let sCode = aContexts.map(function (oContext) {
-                        return oContext.getObject().Code;
+                        return oContext.getObject().Pernr;
                     }).join(", ");
                     // now set the returned values back into the view
-                    oView.byId("justifCDI").setDescription(sDescription);
-                    oView.byId("justifCDI").setValue(sCode);
+                    oView.byId("relatedPernr").setDescription(sDescription);
+                    oView.byId("relatedPernr").setValue(sCode);
                 }
                 // clear filters
                 oEvent.getSource().getBinding("items").filter([]);
                 // destroy the dialog
-                if (this.fragments._oPernrDialog) {
-                    this.fragments._oPernrDialog.destroy();
-                    delete this.fragments._oPernrDialog;
+                if (this.fragments._oRelatedPernrDialog) {
+                    this.fragments._oRelatedPernrDialog.destroy();
+                    delete this.fragments._oRelatedPernrDialog;
+                }
+            },
+
+            onConfirmReplacedPernrSelectDialogPress: function (oEvent) {
+
+                const oView = this.getView();
+                const aContexts = oEvent.getParameter("selectedContexts");
+                // get back the selected entry data
+                if (aContexts && aContexts.length) {
+                    let sDescription = aContexts.map(function (oContext) {
+                        return oContext.getObject().Ename;
+                    }).join(", ");
+                    let sCode = aContexts.map(function (oContext) {
+                        return oContext.getObject().Pernr;
+                    }).join(", ");
+                    // now set the returned values back into the view
+                    oView.byId("replacedPernr").setDescription(sDescription);
+                    oView.byId("replacedPernr").setValue(sCode);
+                }
+                // clear filters
+                oEvent.getSource().getBinding("items").filter([]);
+                // destroy the dialog
+                if (this.fragments._oReplacedPernrDialog) {
+                    this.fragments._oReplacedPernrDialog.destroy();
+                    delete this.fragments._oReplacedPernrDialog;
                 }
             },
             /**********************************************************************************************************************************/
@@ -919,6 +1008,7 @@ sap.ui.define([
 
 
             _applyFilterPernrDialog: function (sTypePernr) {
+                debugger;
 
                 // Get filter value
                 const bindingContext = this.getView().getBindingContext();
@@ -933,7 +1023,8 @@ sap.ui.define([
                 });
 
                 // filter items binding
-                const oBinding = sap.ui.getCore().byId("pernrSelectDialog").getBinding("items");
+                let sTypeDialog = (sTypePernr === "relatedPernr" ? "relatedPernrSelectDialog" : "replacedPernrSelectDialog");
+                const oBinding = sap.ui.getCore().byId(sTypeDialog).getBinding("items");
                 if (oBinding) {
                     oBinding.filter([oCombinedFilter]);
                 }

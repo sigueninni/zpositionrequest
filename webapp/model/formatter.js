@@ -113,13 +113,11 @@ sap.ui.define([], function () {
         },
 
         calculateNbHoursYear: function (oPercentage) {
-            debugger;
             return (2080 * oPercentage / 100)
 
         },
 
         calculateNbHoursMonth: function (oPercentage) {
-            debugger;
             const nbHoursMonth = 173.60 * oPercentage / 100;
             return nbHoursMonth;
         },

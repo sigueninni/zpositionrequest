@@ -595,7 +595,7 @@
                                     value="{RelatedPernr}"
                                     showValueHelp="true"
                                     valueHelpOnly="true"
-                                    valueHelpRequest="onPernrValueHelpPress"
+                                    valueHelpRequest="onRelatedPernrValueHelpPress"
                                     editable="{RequestSettings/IsFormEditable}"
                                 />
 
@@ -611,7 +611,7 @@
                                     value="{ReplacedPernr}"
                                     showValueHelp="true"
                                     valueHelpOnly="true"
-                                    valueHelpRequest="onPernrValueHelpPress"
+                                    valueHelpRequest="onReplacedPernrValueHelpPress"
                                     editable="{RequestSettings/IsFormEditable}"
                                 />
 
