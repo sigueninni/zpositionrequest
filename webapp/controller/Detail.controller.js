@@ -219,6 +219,16 @@ sap.ui.define([
             },
 
             /**
+          * Event handler for the save button 
+          * @param {sap.ui.base.Event} oEvent the button Click event
+          * @public
+          */
+
+            onSaveButtonPress: function (oEvent) {
+                this._savePosRequestObject();
+            },
+
+            /**
           * Event handler for the button delete 
           * @param {sap.ui.base.Event} oEvent the button Click event
           * @public
@@ -294,7 +304,6 @@ sap.ui.define([
                 const oModel = this.getView().getModel();
 
                 oModel.setProperty("Poscharac", "", this.getView().getBindingContext());
-                oModel.setProperty("Justifcdi", "", this.getView().getBindingContext());
                 this.getView().byId("justifCDI").setDescription("");
 
 
@@ -676,6 +685,77 @@ sap.ui.define([
             /********************************  End PosCharac management ********************************************/
             /**********************************************************************************************************/
 
+
+            /**********************************************************************************************************************************/
+            /********************************  Begin PersonSearch(related and replaced) management ********************************************/
+            /**********************************************************************************************************************************/
+
+            /**
+              * Event handler for the ValueHelpPress event
+              * @param {sap.ui.base.Event} oEvent t
+              * @public
+              */
+            onPernrValueHelpPress: function (oEvent) {
+                debugger;
+                const oView = this.getView();
+                if (!this.fragments._oPernrDialog) {
+                    this.fragments._oPernrDialog = sap.ui.xmlfragment("lu.uni.zpositionrequest.fragment.PernrChoice", this);
+                    this.getView().addDependent(this.fragments._oPernrDialog);
+                    // forward compact/cozy style into Dialog
+                    this.fragments._oPernrDialog.addStyleClass(this.getOwnerComponent().getContentDensityClass());
+                }
+
+                // Apply type of pernr search filter
+                const sFullId = oEvent.getSource().getId();
+                const sLocalId = sFullId.split("--").pop();
+                this._applyFilterPernrDialog(sLocalId);
+
+                this.fragments._oPernrDialog.open();
+            },
+
+            onSearchPernrSelectDialogPress: function (oEvent) {
+                var sValue = oEvent.getParameter("value").toString();
+                if (sValue !== "") {
+                    var oFilter = new Filter("Code", sap.ui.model.FilterOperator.Contains, sValue);
+                    var oBinding = oEvent.getSource().getBinding("items");
+                    oBinding.filter([oFilter]);
+                } else {
+                    // clear filters
+                    oEvent.getSource().getBinding("items").filter([]);
+                }
+            },
+
+
+            onConfirmPernrSelectDialogPress: function (oEvent) {
+
+                const oView = this.getView();
+                const aContexts = oEvent.getParameter("selectedContexts");
+                // get back the selected entry data
+                if (aContexts && aContexts.length) {
+                    let sDescription = aContexts.map(function (oContext) {
+                        return oContext.getObject().Description;
+                    }).join(", ");
+                    let sCode = aContexts.map(function (oContext) {
+                        return oContext.getObject().Code;
+                    }).join(", ");
+                    // now set the returned values back into the view
+                    oView.byId("justifCDI").setDescription(sDescription);
+                    oView.byId("justifCDI").setValue(sCode);
+                }
+                // clear filters
+                oEvent.getSource().getBinding("items").filter([]);
+                // destroy the dialog
+                if (this.fragments._oPernrDialog) {
+                    this.fragments._oPernrDialog.destroy();
+                    delete this.fragments._oPernrDialog;
+                }
+            },
+            /**********************************************************************************************************************************/
+            /********************************  End   PersonSearch(related and replaced) management ********************************************/
+            /**********************************************************************************************************************************/
+
+
+
             /* =========================================================== */
             /* Internal methods                                     */
             /* =========================================================== */
@@ -838,6 +918,30 @@ sap.ui.define([
             },
 
 
+            _applyFilterPernrDialog: function (sTypePernr) {
+
+                // Get filter value
+                const bindingContext = this.getView().getBindingContext();
+                const oPositionRequest = bindingContext.getObject();
+
+                const oFilterDate = new sap.ui.model.Filter("Begda", sap.ui.model.FilterOperator.EQ, oPositionRequest.StartDate);
+                const oFilterType = new sap.ui.model.Filter("Type", sap.ui.model.FilterOperator.EQ, sTypePernr);
+
+                const oCombinedFilter = new sap.ui.model.Filter({
+                    filters: [oFilterDate, oFilterType],
+                    and: true
+                });
+
+                // filter items binding
+                const oBinding = sap.ui.getCore().byId("pernrSelectDialog").getBinding("items");
+                if (oBinding) {
+                    oBinding.filter([oCombinedFilter]);
+                }
+            },
+
+
+
+
             _updateJobInfos: function () {
 
                 debugger;
@@ -884,23 +988,55 @@ sap.ui.define([
             },
 
             _updateUiSettings(oId, oValue) {
-
                 const oUiSettingsModel = this.getOwnerComponent().getModel("uiSettings");
 
                 if (oId === "contractType") {
                     if (oValue === 'CDI') {
-                        oUiSettingsModel.setProperty("/justifCDIVisible", true);
+                        // oUiSettingsModel.setProperty("/justifCDIVisible", true);
                         oUiSettingsModel.setProperty("/justifCDDVisible", false);
                     }
 
                     if (oValue === 'CDD') {
-                        oUiSettingsModel.setProperty("/justifCDIVisible", false);
+                        // oUiSettingsModel.setProperty("/justifCDIVisible", false);
                         oUiSettingsModel.setProperty("/justifCDDVisible", true);
                     }
                 }
 
+            },
 
+            _savePosRequestObject: function () {
+                const that = this;
+                const oView = this.getView();
+                const oModel = oView.getModel();
+                const oResourceBundle = this.getResourceBundle();
+                // set status to saved draft
+                oView.byId("draftIndicator").showDraftSaving();
 
+                if (oModel.hasPendingChanges()) {
+
+                    // set busy indicator during view binding
+                    var oViewModel = this.getModel("detailView");
+                    oViewModel.setProperty("/busy", true);
+
+                    oModel.submitChanges({
+                        success: function (oBatchData) {
+                            oViewModel.setProperty("/busy", false);
+                            // error in $batch responses / payload ? > no ChangeResponses ?
+                            if (!oBatchData.__batchResponses[0].__changeResponses) {
+                                var oError = JSON.parse(oBatchData.__batchResponses[0].response.body);
+                                MessageBox.error(oError.error.message.value.toString());
+                                oModel.resetChanges();
+                            } else {
+                                // reset the message popover 
+                                sap.ui.getCore().getMessageManager().removeAllMessages();
+                                that._resetValidationChecks();
+                                oView.byId("draftIndicator").showDraftSaved();
+                            }
+                        }
+                    });
+                } else {
+                    //MessageBox.information(oResourceBundle.getText("noChangesToSubmit"));
+                }
             }
 
         });

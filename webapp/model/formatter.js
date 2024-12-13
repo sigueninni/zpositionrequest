@@ -118,6 +118,12 @@ sap.ui.define([], function () {
 
         },
 
+        calculateNbHoursMonth: function (oPercentage) {
+            debugger;
+            const nbHoursMonth = 173.60 * oPercentage / 100;
+            return nbHoursMonth;
+        },
+
         joinDatesJustifCDI: function (begda, endda) {
             if (!begda && !endda) {
                 return ""; // Si aucune date n'est fournie

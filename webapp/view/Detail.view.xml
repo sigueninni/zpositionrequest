@@ -443,7 +443,7 @@
                                     />
                                     <core:Title text="{i18n>workingTime}" />
                                     <Label
-                                        text="{i18n>posAllocPercentage}"
+                                        text="{i18n>percentage}"
                                         labelFor="posAllocPercentage"
                                         required="true"
                                     />
@@ -464,15 +464,30 @@
                                         change=".onPosAllocPercentageChange"
                                     />
                                     <Label
-                                        text="{i18n>workingTime}"
-                                        labelFor="workingTime"
+                                        text="{i18n>nbHoursYear}"
+                                        labelFor="nbHoursYear"
                                     />
 
                                     <Input
-                                        id="workingTime"
+                                        id="nbHoursYear"
                                         value="{
                                             path: 'PosAllocPercent',
                                             formatter: '.formatter.calculateNbHoursYear'
+                                        }"
+                                        type="Number"
+                                        editable="false"
+                                        required="false"
+                                    />
+                                    <Label
+                                        text="{i18n>nbHoursMonth}"
+                                        labelFor="nbHoursMonth"
+                                    />
+
+                                    <Input
+                                        id="nbHoursMonth"
+                                        value="{
+                                            path: 'PosAllocPercent',
+                                            formatter: '.formatter.calculateNbHoursMonth'
                                         }"
                                         type="Number"
                                         editable="false"
@@ -510,8 +525,8 @@
                             >
                                 <core:Title text="" />
                                 <Label
-                                    text="{i18n>justifCDI}"
-                                    labelFor="justifCDI"
+                                    text="{i18n>initiativeStrat}"
+                                    labelFor="initiativeStrat"
                                 />
                                 <Input
                                     id="justifCDI"
@@ -522,7 +537,7 @@
                                     valueHelpRequest="onJustifCDIValueHelpPress"
                                     editable="{RequestSettings/IsFormEditable}"
                                     visible="{uiSettings>/justifCDIVisible}"
-                                    required="true"
+                                    required="false"
                                 />
 
                                 <Label
@@ -570,8 +585,6 @@
                                     editable="true"
                                 />
 
-                                <core:Title text="" />
-
                                 <Label
                                     text="{i18n>relatedPernr}"
                                     labelFor="relatedPernr"
@@ -582,7 +595,23 @@
                                     value="{RelatedPernr}"
                                     showValueHelp="true"
                                     valueHelpOnly="true"
-                                    valueHelpRequest="onRelatedPernrValueHelpPress"
+                                    valueHelpRequest="onPernrValueHelpPress"
+                                    editable="{RequestSettings/IsFormEditable}"
+                                />
+
+                                <core:Title text="" />
+
+                                <Label
+                                    text="{i18n>replacedPernr}"
+                                    labelFor="replacedPernr"
+                                />
+                                <Input
+                                    id="replacedPernr"
+                                    type="Text"
+                                    value="{ReplacedPernr}"
+                                    showValueHelp="true"
+                                    valueHelpOnly="true"
+                                    valueHelpRequest="onPernrValueHelpPress"
                                     editable="{RequestSettings/IsFormEditable}"
                                 />
 
@@ -648,7 +677,7 @@
             <!-- FC Note Section -->
             <uxap:ObjectPageSection
                 id="fcNoteSection"
-                title="FC notes"
+                title="Position notes"
             >
                 <uxap:subSections>
                     <uxap:ObjectPageSubSection id="fcNotesSubSection">
@@ -869,5 +898,49 @@
                 </uxap:subSections>
             </uxap:ObjectPageSection>
         </uxap:sections>
+        <uxap:footer>
+            <OverflowToolbar>
+                <content>
+                    <Button
+                        id="messagePopoverBtn"
+                        icon="sap-icon://message-popup"
+                        type="Emphasized"
+                        text="{=${message>/}.length}"
+                        visible="{=!!${message>/}.length}"
+                        press="onMessagesButtonPress"
+                    />
+                    <DraftIndicator
+                        id="draftIndicator"
+                        state="Saved"
+                        minDisplayTime="1500"
+                        visible="{RequestSettings/IsDraftHandlingEnabled}"
+                    />
+                    <ToolbarSpacer width="" />
+                    <Button
+                        text="{i18n>save}"
+                        press="onSaveButtonPress"
+                        type="Emphasized"
+                        visible="{RequestSettings/IsDraftHandlingEnabled}"
+                    />
+                    <Button
+                        text="{i18n>cancel}"
+                        press="onCancelButtonPress"
+                        visible="{RequestSettings/IsDraftHandlingEnabled}"
+                    />
+                    <!--                     <Button
+                        text="{i18n>saveAndClose}"
+                        type="Emphasized"
+                        visible="{RequestSettings/IsEditionActionsEnabled}"
+                        press="onSaveEditionButtonPress"
+                    />
+                    <Button
+                        text="{i18n>cancelAndClose}"
+                        type="Default"
+                        visible="{RequestSettings/IsEditionActionsEnabled}"
+                        press="onCancelEditButtonPress"
+                    /> -->
+                </content>
+            </OverflowToolbar>
+        </uxap:footer>
     </uxap:ObjectPageLayout>
 </mvc:View>

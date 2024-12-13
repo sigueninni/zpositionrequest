@@ -1,8 +1,8 @@
 {
     "rangeVisible": false,
     "rangeEdit": true,
-    "justifCDIVisible": false,
-    "justifCDIEdit": false,
+    "justifCDIVisible": true,
+    "justifCDIEdit": true,
     "justifCDDVisible": false,
     "justifCDDEdit": false
 }

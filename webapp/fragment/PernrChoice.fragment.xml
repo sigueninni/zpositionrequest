@@ -1,0 +1,35 @@
+<core:FragmentDefinition
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m"
+    xmlns:customData="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+>
+    <!-- items="{ path: '/JobGroupSet' }" -->
+    <SelectDialog
+        id="pernrSelectDialog"
+        noDataText="{i18n>noPersonFound}"
+        title="{i18n>selectPerson}"
+        cancel="onCancel"
+        search="onSearchPersonDialogPress"
+        confirm="onConfirmPersonSelectDialogPress"
+        items="{
+                path : '/PersonSet',
+                sorter: {
+                    path: 'Ename',
+                    descending: true
+                }
+                }"
+        rememberSelections="false"
+        customData:name="_oPernrDialog"
+    >
+        <!--     ,
+                filters : [
+                    { path : 'JobAreaCode', operator : 'EQ', value1 :'{/JobArea}'  }
+                ] -->
+        <ObjectListItem title="{Pernr}">
+            <attributes>
+                <ObjectAttribute text="{Ename}" />
+                <ObjectAttribute text="{Stat2Text}" />
+            </attributes>
+        </ObjectListItem>
+    </SelectDialog>
+</core:FragmentDefinition>
