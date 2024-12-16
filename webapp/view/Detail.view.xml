@@ -392,7 +392,7 @@
                         </uxap:blocks>
                     </uxap:ObjectPageSubSection>
 
-                    <!-- Employee Group/SubGroup Form -->
+                    <!-- Begin of Employee Group/SubGroup Form -->
                     <uxap:ObjectPageSubSection
                         id="empGroupSubGroupSubSection"
                         title="{i18n>empGroupSubGroupAndWorkingTime}"
@@ -499,8 +499,9 @@
                         <uxap:moreBlocks />
                         <uxap:actions />
                     </uxap:ObjectPageSubSection>
+                    <!-- End of Employee Group/SubGroup Form -->
 
-                    <!-- Position Charatertistic Form -->
+                    <!-- Begin of Position Charatertistic Form -->
                     <uxap:ObjectPageSubSection
                         id="positionCharacteristicSubSection"
                         title="{i18n>positionCharacteristic}"
@@ -628,8 +629,9 @@
                             </form:SimpleForm>
                         </uxap:blocks>
                     </uxap:ObjectPageSubSection>
+                    <!-- End of Position Charatertistic Form -->
 
-                    <!-- Assignment Form -->
+                    <!-- Begin of Assignment Form -->
                     <uxap:ObjectPageSubSection
                         id="assignmentSubSection"
                         title="{i18n>assignment}"
@@ -670,6 +672,82 @@
                                 </form:content>
                             </form:SimpleForm>
                         </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                    <!-- End of Assignment Form -->
+
+                    <uxap:ObjectPageSubSection
+                        title="{i18n>costsAssignment}"
+                        mode="Expanded"
+                    >
+                        <uxap:blocks>
+                            <Table
+                                id="costAssignmentsTable"
+                                width="100%"
+                                noDataText="{i18n>noCosts}"
+                                mode="{RequestSettings/ListMode}"
+                                items="{CostAssignments}"
+                                delete="onDeleteCostAssignmentButtonPress"
+                            >
+                                <headerToolbar>
+                                    <OverflowToolbar
+                                        width="auto"
+                                        height="auto"
+                                        design="Transparent"
+                                        visible="true"
+                                        enabled="true"
+                                    >
+                                        <content>
+                                            <ToolbarSpacer width="" />
+                                            <Button
+                                                type="Default"
+                                                icon="sap-icon://add"
+                                                iconFirst="true"
+                                                width="auto"
+                                                enabled="{RequestSettings/IsFormEditable}"
+                                                visible="true"
+                                                iconDensityAware="false"
+                                                tooltip="{i18n>add}"
+                                                press="onAddCostAssignmentButtonPress"
+                                            />
+                                        </content>
+                                    </OverflowToolbar>
+                                </headerToolbar>
+                                <columns>
+                                    <Column width="auto">
+                                        <Text text="{i18n>entity}" />
+                                    </Column>
+                                    <Column width="auto">
+                                        <Text text="{i18n>wbsElement}" />
+                                    </Column>
+                                    <Column
+                                        demandPopin="true"
+                                        hAlign="Right"
+                                        width="15%"
+                                    >
+                                        <Text
+                                            text="{i18n>assignmentPercentage}"
+                                        />
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{Entity}" />
+                                            <ObjectIdentifier
+                                                title="{WBSElementId}"
+                                                text="{WBSElementShortDescription}"
+                                            />
+                                            <ObjectNumber
+                                                number="{AssignmentPercentage}"
+                                                unit="%"
+                                            />
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+                        </uxap:blocks>
+                        <uxap:moreBlocks />
+                        <uxap:actions />
                     </uxap:ObjectPageSubSection>
                 </uxap:subSections>
             </uxap:ObjectPageSection>

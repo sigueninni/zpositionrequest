@@ -1,0 +1,108 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+>
+    <form:SimpleForm
+        id="costAssignmentForm"
+        editable="true"
+        layout="ResponsiveGridLayout"
+        labelSpanXL="4"
+        labelSpanL="3"
+        labelSpanM="4"
+        labelSpanS="12"
+        adjustLabelSpan="false"
+        emptySpanXL="0"
+        emptySpanL="4"
+        emptySpanM="0"
+        emptySpanS="0"
+        columnsXL="2"
+        columnsL="1"
+        columnsM="1"
+        singleContainerFullSize="false"
+    >
+        <form:content>
+            <core:Title text="searchWBS" />
+            <Label text="{i18n>entity}" />
+            <Input
+                id="entity"
+                type="Text"
+                value="{WBSElementId}"
+                showValueHelp="true"
+                valueHelpOnly="true"
+                valueHelpRequest="onWBSElementValueHelpPress"
+                required="true"
+            />
+            <Label text="{i18n>area}" />
+            <Input
+                id="area"
+                type="Text"
+                value="{WBSElementId}"
+                showValueHelp="true"
+                valueHelpOnly="true"
+                valueHelpRequest="onWBSElementValueHelpPress"
+                required="true"
+            />
+            <Label text="{i18n>fundingCategory}" />
+            <Input
+                id="fundingCategory"
+                type="Text"
+                value="{WBSElementId}"
+                showValueHelp="true"
+                valueHelpOnly="true"
+                valueHelpRequest="onWBSElementValueHelpPress"
+                required="true"
+            />
+            <Label text="{i18n>funding}" />
+            <Input
+                id="funding"
+                type="Text"
+                value="{WBSElementId}"
+                showValueHelp="true"
+                valueHelpOnly="true"
+                valueHelpRequest="onWBSElementValueHelpPress"
+                required="true"
+            />
+            <Label text="{i18n>eoyCategory}" />
+            <Input
+                id="eoyCategory"
+                type="Text"
+                value="{WBSElementId}"
+                showValueHelp="true"
+                valueHelpOnly="true"
+                valueHelpRequest="onWBSElementValueHelpPress"
+                required="true"
+            />
+            <Label text="{i18n>eoySubCategory}" />
+            <Input
+                id="eoySubCategory"
+                type="Text"
+                value="{WBSElementId}"
+                showValueHelp="true"
+                valueHelpOnly="true"
+                valueHelpRequest="onWBSElementValueHelpPress"
+                required="true"
+            />
+
+            <core:Title text="WBS element and percentage" />
+            <Label text="{i18n>wbsElement}" />
+            <Input
+                id="wbsElementId"
+                type="Text"
+                value="{WBSElementId}"
+                showValueHelp="true"
+                valueHelpOnly="true"
+                valueHelpRequest="onWBSElementValueHelpPress"
+                required="true"
+            />
+            <Label text="{i18n>assignmentPercentage}" />
+            <Input
+                id="wbsAssignmentPercentage"
+                type="Number"
+                value="{ path: 'AssignmentPercentage', type: 'sap.ui.model.type.Integer'}"
+                required="true"
+                description="%"
+            />
+        </form:content>
+    </form:SimpleForm>
+</core:FragmentDefinition>

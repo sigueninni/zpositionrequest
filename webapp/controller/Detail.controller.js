@@ -223,7 +223,6 @@ sap.ui.define([
           * @param {sap.ui.base.Event} oEvent the button Click event
           * @public
           */
-
             onSaveButtonPress: function (oEvent) {
                 this._savePosRequestObject();
             },
@@ -340,7 +339,81 @@ sap.ui.define([
                 }
             },
 
+            /**
+              * Event handler for the onClick : costAssignment
+              * @param {sap.ui.base.Event} oEvent the button OnClick event
+              * @public
+              */
+            onAddCostAssignmentButtonPress: function (oEvent) {
+                var that = this;
+                var oView = this.getView();
+                var oModel = oView.getModel();
+                var oResourceBundle = this.getResourceBundle();
+                var sGroupId = this.createId("groupId");
+                var aDeferredGroups = oModel.getDeferredGroups();
+                // set this subset to deferred
+                aDeferredGroups = aDeferredGroups.concat([sGroupId]);
+                oModel.setDeferredGroups(aDeferredGroups);
 
+                // create new CostAssignment entity and bind it to the dialog view
+                var oContext = oModel.createEntry("/CostAssignmentSet", {
+                    groupId: sGroupId, // if set and not deferred - POST request is triggered directly and request queue is not used
+                    properties: {
+                        "Id": oView.getBindingContext().getObject().Id,
+                        "AssignmentPercentage": 100,
+                        "IsMainWBS": true
+                    }
+                });
+
+                // create a new dialog instance
+                if (!this.fragments._oAddCostAssignmentDialog) {
+                    this.fragments._oAddCostAssignmentDialog = new sap.m.Dialog({
+                        id: "costAssignmentDialog",
+                        title: oResourceBundle.getText("costAssignment"),
+                        content: sap.ui.xmlfragment("lu.uni.zpositionrequest.fragment.CostAssignmentDialog", this),
+                        beginButton: new sap.m.Button({
+                            text: oResourceBundle.getText("cancel"),
+                            press: function () {
+                                // delete the created entry
+                                // oModel.deleteCreatedEntry(oContext); // work only in transient mode - if no groupId is used with createEntry (request queue is then used)
+                                // destroy and remove from DOM the dialog instance
+                                that._removeCostAssignmentDialog();
+                            }.bind(that)
+                        }),
+                        endButton: new sap.m.Button({
+                            text: oResourceBundle.getText("submit"),
+                            press: function () {
+                                // submit the created entry
+                                oModel.submitChanges({
+                                    groupId: sGroupId,
+                                    success: function (oBatchData) {
+                                        // destroy and remove from DOM the dialog instance
+                                        that._removeCostAssignmentDialog();
+                                        // error in $batch responses / payload ? > no ChangeResponses ?
+                                        if (!oBatchData.__batchResponses[0].__changeResponses) {
+                                            var oError = JSON.parse(oBatchData.__batchResponses[0].response.body);
+                                            MessageBox.error(oError.error.message.value.toString());
+                                            oModel.deleteCreatedEntry(oContext);
+                                        }
+                                    },
+                                    error: function (oError) {
+                                        sap.m.MessageBox.error(JSON.parse(oError.responseText).error.message.value);
+                                        oModel.deleteCreatedEntry(oContext);
+                                    }
+                                });
+                            }
+                        })
+                    });
+                    this.fragments._oAddCostAssignmentDialog.setModel(oView.getModel("i18n"), "i18n");
+                }
+
+                // set the context to the dialog (binding)
+                this.fragments._oAddCostAssignmentDialog.setBindingContext(oContext);
+
+                // now add the dialog to the view and open it
+                oView.addDependent(this.fragments._oAddCostAssignmentDialog);
+                this.fragments._oAddCostAssignmentDialog.open();
+            },
 
             /*************************************************************************************************/
             /********************************  Begin Job management ******************************************/
@@ -870,6 +943,7 @@ sap.ui.define([
              * @private
              */
             _getTimeConstraints: function () {
+                debugger;
                 /*  //Start Date 
                  --> Not in the past
                  --> Limit Year + 4 
@@ -881,12 +955,14 @@ sap.ui.define([
                 const object = bindingContext.getModel().getProperty(path);
                 let oPositionRequest = bindingContext.getObject(); //getProperty("ReqFlow"); //bindingContext.getObject()
                 let startDate = oPositionRequest.StartDate;
+                let createdOnDate = oPositionRequest.CreatedOn || '';
                 let oUrlParam = {
                     "ReqType": oPositionRequest.ReqType,
                     "ReqFlow": oPositionRequest.ReqFlow,
                     //"StartDate": startDate,
                     "ContractType": oPositionRequest.ContractType,
-                    "DurationInMonths": oPositionRequest.DurationInMonths
+                    "DurationInMonths": oPositionRequest.DurationInMonths,
+                    "CreatedOn": createdOnDate
 
                 };
 
@@ -1128,6 +1204,12 @@ sap.ui.define([
                 } else {
                     //MessageBox.information(oResourceBundle.getText("noChangesToSubmit"));
                 }
+            },
+
+            _removeCostAssignmentDialog: function () {
+                this.fragments._oAddCostAssignmentDialog.close();
+                sap.ui.getCore().byId("costAssignmentDialog").destroy();
+                delete this.fragments._oAddCostAssignmentDialog;
             }
 
         });
