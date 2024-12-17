@@ -1,0 +1,21 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <SelectDialog
+        id="wbsElementSelectDialog"
+        noDataText="{i18n>noWBSElementFound}"
+        title="{i18n>selectWBSElement}"
+        search="onSearchWBSElementSelectDialog"
+        confirm="onConfirmWBSElementSelectDialogPress"
+        items="{ path: '/CostElementSet' }"
+        rememberSelections="false"
+    >
+        <ObjectListItem title="{ElementId}">
+            <attributes>
+                <ObjectAttribute text="{ElementDescription}" />
+                <!-- <ObjectAttribute text="{BudgetResponsibleName}" /> -->
+            </attributes>
+        </ObjectListItem>
+    </SelectDialog>
+</core:FragmentDefinition>

@@ -2,6 +2,7 @@
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
     xmlns:form="sap.ui.layout.form"
+    xmlns:customData="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
 >
     <form:SimpleForm
         id="costAssignmentForm"
@@ -31,7 +32,6 @@
                 showValueHelp="true"
                 valueHelpOnly="true"
                 valueHelpRequest="onWBSElementValueHelpPress"
-                required="true"
             />
             <Label text="{i18n>area}" />
             <Input
@@ -41,7 +41,6 @@
                 showValueHelp="true"
                 valueHelpOnly="true"
                 valueHelpRequest="onWBSElementValueHelpPress"
-                required="true"
             />
             <Label text="{i18n>fundingCategory}" />
             <Input
@@ -51,7 +50,6 @@
                 showValueHelp="true"
                 valueHelpOnly="true"
                 valueHelpRequest="onWBSElementValueHelpPress"
-                required="true"
             />
             <Label text="{i18n>funding}" />
             <Input
@@ -61,7 +59,6 @@
                 showValueHelp="true"
                 valueHelpOnly="true"
                 valueHelpRequest="onWBSElementValueHelpPress"
-                required="true"
             />
             <Label text="{i18n>eoyCategory}" />
             <Input
@@ -71,7 +68,6 @@
                 showValueHelp="true"
                 valueHelpOnly="true"
                 valueHelpRequest="onWBSElementValueHelpPress"
-                required="true"
             />
             <Label text="{i18n>eoySubCategory}" />
             <Input
@@ -81,7 +77,6 @@
                 showValueHelp="true"
                 valueHelpOnly="true"
                 valueHelpRequest="onWBSElementValueHelpPress"
-                required="true"
             />
 
             <core:Title text="WBS element and percentage" />

@@ -31,7 +31,7 @@ sap.ui.define([
                 // Model used to manipulate control states. The chosen values make sure,
                 // detail page is busy indication immediately so there is no break in
                 // between the busy indication for loading the view's meta data
-                var oViewModel = new JSONModel({
+                let oViewModel = new JSONModel({
                     busy: false,
                     delay: 0,
                     isMandatory: true,
@@ -52,7 +52,7 @@ sap.ui.define([
                 });
 
                 // set message model
-                var oMessageManager = sap.ui.getCore().getMessageManager();
+                const oMessageManager = sap.ui.getCore().getMessageManager();
                 oView.setModel(oMessageManager.getMessageModel(), "message");
                 oMessageManager.removeAllMessages();
                 oMessageManager.registerObject(oView, true);
@@ -70,7 +70,7 @@ sap.ui.define([
                 /*******************************************************************************/
                 //TO_REPLACE with real Cost Simulation data
                 /*******************************************************************************/
-                var data = [{
+                const data = [{
                     "Year": "2024",
                     "Cost": 10000
                 }, {
@@ -127,7 +127,7 @@ sap.ui.define([
                 oChartContainer.addFeed(oRevenueFeed);
 
                 // create table content
-                var oTable = this.getView().byId("idTable");
+                const oTable = this.getView().byId("idTable");
 
 
             },
@@ -144,9 +144,9 @@ sap.ui.define([
              * @private
              */
             _onObjectMatched: function (oEvent) {
-                var oView = this.getView();
-                var oModel = oView.getModel();
-                var sObjectId = oEvent.getParameter("arguments").positionRequestId;
+                const oView = this.getView();
+                const oModel = oView.getModel();
+                const sObjectId = oEvent.getParameter("arguments").positionRequestId;
 
                 this.getModel().metadataLoaded().then(function () {
                     // first reset all changes if any
@@ -339,24 +339,28 @@ sap.ui.define([
                 }
             },
 
+            /*************************************************************************************************/
+            /********************************  Begin of Cost assignment ******************************************/
+            /*************************************************************************************************/
+
             /**
               * Event handler for the onClick : costAssignment
               * @param {sap.ui.base.Event} oEvent the button OnClick event
               * @public
               */
             onAddCostAssignmentButtonPress: function (oEvent) {
-                var that = this;
-                var oView = this.getView();
-                var oModel = oView.getModel();
-                var oResourceBundle = this.getResourceBundle();
-                var sGroupId = this.createId("groupId");
-                var aDeferredGroups = oModel.getDeferredGroups();
+                const that = this;
+                const oView = this.getView();
+                const oModel = oView.getModel();
+                const oResourceBundle = this.getResourceBundle();
+                const sGroupId = this.createId("groupId");
+                let aDeferredGroups = oModel.getDeferredGroups();
                 // set this subset to deferred
                 aDeferredGroups = aDeferredGroups.concat([sGroupId]);
                 oModel.setDeferredGroups(aDeferredGroups);
 
                 // create new CostAssignment entity and bind it to the dialog view
-                var oContext = oModel.createEntry("/CostAssignmentSet", {
+                let oContext = oModel.createEntry("/CostAssignmentSet", {
                     groupId: sGroupId, // if set and not deferred - POST request is triggered directly and request queue is not used
                     properties: {
                         "Id": oView.getBindingContext().getObject().Id,
@@ -391,7 +395,7 @@ sap.ui.define([
                                         that._removeCostAssignmentDialog();
                                         // error in $batch responses / payload ? > no ChangeResponses ?
                                         if (!oBatchData.__batchResponses[0].__changeResponses) {
-                                            var oError = JSON.parse(oBatchData.__batchResponses[0].response.body);
+                                            const oError = JSON.parse(oBatchData.__batchResponses[0].response.body);
                                             MessageBox.error(oError.error.message.value.toString());
                                             oModel.deleteCreatedEntry(oContext);
                                         }
@@ -414,6 +418,54 @@ sap.ui.define([
                 oView.addDependent(this.fragments._oAddCostAssignmentDialog);
                 this.fragments._oAddCostAssignmentDialog.open();
             },
+
+
+            onWBSElementValueHelpPress: function (oEvent) {
+                var oView = this.getView();
+                if (!this.fragments._oSelectWBSElementDialog) {
+                    this.fragments._oSelectWBSElementDialog = sap.ui.xmlfragment("lu.uni.zpositionrequest.fragment.WBSElementSelectDialog", this);
+                    this.fragments._oSelectWBSElementDialog.setModel(oView.getModel());
+                    this.fragments._oSelectWBSElementDialog.setModel(oView.getModel("i18n"), "i18n");
+                }
+                this.fragments._oSelectWBSElementDialog.open();
+            },
+
+
+            onSearchWBSElementSelectDialog: function (oEvent) {
+                var sValue = oEvent.getParameter("value");
+                if (sValue !== "") {
+                    var oFilter = new Filter("ElementDescription", sap.ui.model.FilterOperator.Contains, sValue);
+                    var oBinding = oEvent.getSource().getBinding("items");
+                    oBinding.filter([oFilter]);
+                } else {
+                    // clear filters
+                    oEvent.getSource().getBinding("items").filter([]);
+                }
+            },
+
+            onConfirmWBSElementSelectDialogPress: function (oEvent) {
+                var aContexts = oEvent.getParameter("selectedContexts");
+                // get back the selected entry data
+                if (aContexts && aContexts.length) {
+                    var sElementId = aContexts.map(function (oContext) {
+                        return oContext.getObject().ElementId;
+                    }).join(", ");
+                    // now set the returned values back into the view
+                    sap.ui.getCore().byId("wbsElementId").setValue(sElementId);
+                }
+                // clear filters
+                oEvent.getSource().getBinding("items").filter([]);
+                // destroy the dialog
+                if (this._oSelectWBSElementDialog) {
+                    this._oSelectWBSElementDialog.destroy();
+                    delete this._oSelectWBSElementDialog;
+                }
+            },
+
+
+            /*************************************************************************************************/
+            /********************************  End of Cost assignment ******************************************/
+            /*************************************************************************************************/
 
             /*************************************************************************************************/
             /********************************  Begin Job management ******************************************/
@@ -496,8 +548,8 @@ sap.ui.define([
                */
 
             onConfirmJobGroupSelectDialogPress: function (oEvent) {
-                var oView = this.getView();
-                var aContexts = oEvent.getParameter("selectedContexts");
+                const oView = this.getView();
+                const aContexts = oEvent.getParameter("selectedContexts");
                 // get back the selected entry data
                 if (aContexts && aContexts.length) {
                     // now set the returned values back into the view
@@ -543,8 +595,8 @@ sap.ui.define([
              * @public
              */
             onConfirmJobSelectDialogPress: function (oEvent) {
-                var oView = this.getView();
-                var aContexts = oEvent.getParameter("selectedContexts");
+                const oView = this.getView();
+                const aContexts = oEvent.getParameter("selectedContexts");
                 // get back the selected entry data
                 if (aContexts && aContexts.length) {
                     // now set the returned values back into the view
@@ -572,10 +624,10 @@ sap.ui.define([
                 this._updateJobInfos();
             },
             onSearchJobGroupSelectDialogPress: function (oEvent) {
-                var sValue = oEvent.getParameter("value").toString();
+                const sValue = oEvent.getParameter("value").toString();
                 if (sValue !== "") {
-                    var oFilter = new Filter("JobGroupId", sap.ui.model.FilterOperator.Contains, sValue);
-                    var oBinding = oEvent.getSource().getBinding("items");
+                    const oFilter = new Filter("JobGroupId", sap.ui.model.FilterOperator.Contains, sValue);
+                    const oBinding = oEvent.getSource().getBinding("items");
                     oBinding.filter([oFilter]);
                 } else {
                     // clear filters
@@ -718,10 +770,10 @@ sap.ui.define([
 
 
             onSearchJustifCDISelectDialogPress: function (oEvent) {
-                var sValue = oEvent.getParameter("value").toString();
+                const sValue = oEvent.getParameter("value").toString();
                 if (sValue !== "") {
-                    var oFilter = new Filter("Code", sap.ui.model.FilterOperator.Contains, sValue);
-                    var oBinding = oEvent.getSource().getBinding("items");
+                    const oFilter = new Filter("Code", sap.ui.model.FilterOperator.Contains, sValue);
+                    const oBinding = oEvent.getSource().getBinding("items");
                     oBinding.filter([oFilter]);
                 } else {
                     // clear filters
@@ -988,7 +1040,7 @@ sap.ui.define([
                     }.bind(this),
                     error: function (oError) {
                         oModel.setProperty("/busy", false);
-                        var oFunctError = JSON.parse(oError.responseText);
+                        const oFunctError = JSON.parse(oError.responseText);
                         MessageBox.error(oFunctError.error.message.value);
                     }
                 });
@@ -1182,7 +1234,7 @@ sap.ui.define([
                 if (oModel.hasPendingChanges()) {
 
                     // set busy indicator during view binding
-                    var oViewModel = this.getModel("detailView");
+                    const oViewModel = this.getModel("detailView");
                     oViewModel.setProperty("/busy", true);
 
                     oModel.submitChanges({
@@ -1190,7 +1242,7 @@ sap.ui.define([
                             oViewModel.setProperty("/busy", false);
                             // error in $batch responses / payload ? > no ChangeResponses ?
                             if (!oBatchData.__batchResponses[0].__changeResponses) {
-                                var oError = JSON.parse(oBatchData.__batchResponses[0].response.body);
+                                const oError = JSON.parse(oBatchData.__batchResponses[0].response.body);
                                 MessageBox.error(oError.error.message.value.toString());
                                 oModel.resetChanges();
                             } else {

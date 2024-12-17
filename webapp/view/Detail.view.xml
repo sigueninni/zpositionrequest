@@ -863,7 +863,7 @@
                                         <Table
                                             id="tableId"
                                             inset="false"
-                                            items=""
+                                            items="{/CostSimulationSet}"
                                         >
                                             <columns>
                                                 <Column width="12em">
@@ -872,30 +872,30 @@
                                                     />
                                                 </Column>
                                                 <Column>
-                                                    <Text text="Cost" />
-                                                </Column>
-                                                <Column>
                                                     <Text text="Year" />
                                                 </Column>
                                                 <Column>
+                                                    <Text text="Cost" />
+                                                </Column>
+                                                <!--            <Column>
                                                     <ObjectNumber
                                                         number="Other?"
                                                     />
-                                                </Column>
+                                                </Column> -->
                                             </columns>
                                             <items>
                                                 <ColumnListItem>
                                                     <cells>
                                                         <ObjectIdentifier
-                                                            title="{name}"
+                                                            title="{OtpId}"
                                                         />
+                                                        <Text text="{Year}" />
                                                         <Text
-                                                            text="{favouriteFood}"
+                                                            text="{AmountPro}"
                                                         />
-                                                        <Text text="{color}" />
-                                                        <ObjectNumber
+                                                        <!--  <ObjectNumber
                                                             number="{numberOfLegs}"
-                                                        />
+                                                        /> -->
                                                     </cells>
                                                 </ColumnListItem>
                                             </items>
